@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tambah Anggota Baru - KasCahh</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dbdad9",
+                      "surface-variant": "#e4e2e2",
+                      "on-primary-fixed-variant": "#00513e",
+                      "on-tertiary-container": "#b2ed83",
+                      "primary": "#005440",
+                      "secondary-fixed": "#d3e7e0",
+                      "surface-bright": "#fbf9f8",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#a0f3d4",
+                      "tertiary-container": "#3b6d11",
+                      "on-secondary-fixed": "#0d1f1b",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f5f3f3",
+                      "outline-variant": "#bec9c3",
+                      "on-secondary-container": "#566863",
+                      "primary-container": "#0f6e56",
+                      "surface-tint": "#086b53",
+                      "secondary-container": "#d3e7e0",
+                      "on-primary-container": "#9aedcf",
+                      "background": "#fbf9f8",
+                      "outline": "#6f7a74",
+                      "surface-container-high": "#e9e8e7",
+                      "inverse-surface": "#303031",
+                      "on-surface": "#1b1c1c",
+                      "tertiary-fixed": "#b8f389",
+                      "inverse-on-surface": "#f2f0f0",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface": "#fbf9f8",
+                      "on-surface-variant": "#3f4944",
+                      "inverse-primary": "#84d6b9",
+                      "tertiary-fixed-dim": "#9dd770",
+                      "primary-fixed-dim": "#84d6b9",
+                      "secondary": "#50625d",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e4e2e2",
+                      "surface-container": "#efeded",
+                      "on-primary-fixed": "#002117",
+                      "secondary-fixed-dim": "#b7cbc4",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#0c2000",
+                      "on-background": "#1b1c1c",
+                      "tertiary": "#275300",
+                      "on-tertiary-fixed-variant": "#265100",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#394a45"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit-md": "16px",
+                      "unit-xl": "32px",
+                      "container-margin": "16px",
+                      "gutter": "12px",
+                      "unit-lg": "24px",
+                      "section-gap": "24px",
+                      "unit-sm": "8px",
+                      "unit-xs": "4px"
+              },
+              "fontFamily": {
+                      "h2": ["Plus Jakarta Sans", "sans-serif"],
+                      "h1": ["Plus Jakarta Sans", "sans-serif"],
+                      "display": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                      "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                      "label-sm": ["Plus Jakarta Sans", "sans-serif"]
+              },
+              "fontSize": {
+                      "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-dim h-screen w-full flex flex-col justify-end overflow-hidden relative">
+<!-- Dimmed Backdrop Overlay -->
+<div class="absolute inset-0 bg-inverse-surface/40 z-10 backdrop-blur-sm transition-opacity"></div>
+<!-- Bottom Sheet Container -->
+<div class="bg-surface-container-lowest w-full rounded-t-[24px] z-20 relative flex flex-col max-h-[795px] shadow-[0_-12px_24px_rgba(0,0,0,0.06)] transform transition-transform duration-300 translate-y-0">
+<!-- Drag Handle Indicator -->
+<div class="w-full flex justify-center py-4 cursor-grab">
+<div class="w-12 h-1.5 bg-surface-variant rounded-full"></div>
+</div>
+<!-- Header -->
+<div class="px-unit-md pb-unit-md flex justify-between items-center">
+<h1 class="font-h1 text-h1 text-on-surface">Tambah Anggota Baru</h1>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 500;">close</span>
+</button>
+</div>
+<!-- Scrollable Form Content -->
+<div class="px-unit-md pb-unit-md overflow-y-auto flex flex-col gap-unit-lg flex-1">
+<!-- Field: Nama Lengkap -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Nama Lengkap</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant">person</span>
+<input class="w-full rounded-xl border border-secondary-container bg-surface-container-lowest pl-12 pr-4 py-3.5 font-body-lg text-body-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Masukkan nama anggota" type="text"/>
+</div>
+</div>
+<!-- Field: Nominal Iuran -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Nominal Iuran per Bayar</label>
+<div class="relative flex items-center">
+<div class="absolute left-0 top-0 bottom-0 flex items-center justify-center pl-4 pr-3 bg-surface-container-low border-y border-l border-secondary-container rounded-l-xl">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Rp</span>
+</div>
+<input class="w-full rounded-r-xl rounded-l-none border border-secondary-container bg-surface-container-lowest pl-16 pr-4 py-3.5 font-body-lg text-body-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" inputmode="numeric" placeholder="0" type="text"/>
+</div>
+</div>
+<!-- Field: Frekuensi (Segmented Control) -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Frekuensi</label>
+<div class="flex bg-surface-container-low p-1.5 rounded-xl border border-surface-container">
+<button class="flex-1 py-2.5 text-center rounded-lg font-label-md text-label-md text-on-surface-variant transition-all hover:text-on-surface" type="button">Harian</button>
+<!-- Active Segment -->
+<button class="flex-1 py-2.5 text-center rounded-lg font-label-md text-label-md bg-surface-container-lowest text-primary-container shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-surface-variant transition-all" type="button">Mingguan</button>
+<button class="flex-1 py-2.5 text-center rounded-lg font-label-md text-label-md text-on-surface-variant transition-all hover:text-on-surface" type="button">Bulanan</button>
+</div>
+</div>
+<!-- Field: Pilih Hari (Chip Grid) -->
+<div class="flex flex-col gap-unit-xs pb-4">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Pilih Hari Tagihan</label>
+<div class="flex flex-wrap gap-2.5 mt-1">
+<!-- Active Chip -->
+<button class="px-5 py-2.5 rounded-full border border-primary-container bg-primary-container text-surface-container-lowest font-label-md text-label-md transition-all flex items-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'wght' 600;">check</span>
+                        Senin
+                    </button>
+<!-- Inactive Chips -->
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Selasa</button>
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Rabu</button>
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Kamis</button>
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Jumat</button>
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Sabtu</button>
+<button class="px-5 py-2.5 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:border-outline hover:text-on-surface transition-all" type="button">Minggu</button>
+</div>
+</div>
+</div>
+<!-- Sticky Footer CTA -->
+<div class="p-unit-md border-t border-surface-variant bg-surface-container-lowest pb-8 pt-4">
+<button class="w-full py-4 rounded-xl bg-primary-container text-surface-container-lowest font-body-lg font-semibold text-[16px] leading-[24px] hover:bg-surface-tint active:scale-[0.98] transition-all shadow-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill">save</span>
+                Simpan Anggota
+            </button>
+</div>
+</div>
+</body></html>

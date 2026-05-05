@@ -1,0 +1,3 @@
+import urllib.request
+url = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA2ZjQ3NDQ3ZGRhMjRiY2Q4ZGIwZDk3ZTZhNTE2MmIwEgsSBxCZyvi90R4YAZIBJAoKcHJvamVjdF9pZBIWQhQxNTUwODMwMTI0NzI1NjAxNTU1NA&filename=&opi=89354086"
+urllib.request.urlretrieve(url, "splash.html")

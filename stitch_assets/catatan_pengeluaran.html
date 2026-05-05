@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Catatan Pengeluaran - KasCahh</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dbdad9",
+                        "surface-variant": "#e4e2e2",
+                        "on-primary-fixed-variant": "#00513e",
+                        "on-tertiary-container": "#b2ed83",
+                        "primary": "#005440",
+                        "secondary-fixed": "#d3e7e0",
+                        "surface-bright": "#fbf9f8",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#a0f3d4",
+                        "tertiary-container": "#3b6d11",
+                        "on-secondary-fixed": "#0d1f1b",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#bec9c3",
+                        "on-secondary-container": "#566863",
+                        "primary-container": "#0f6e56",
+                        "surface-tint": "#086b53",
+                        "secondary-container": "#d3e7e0",
+                        "on-primary-container": "#9aedcf",
+                        "background": "#fbf9f8",
+                        "outline": "#6f7a74",
+                        "surface-container-high": "#e9e8e7",
+                        "inverse-surface": "#303031",
+                        "on-surface": "#1b1c1c",
+                        "tertiary-fixed": "#b8f389",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface": "#fbf9f8",
+                        "on-surface-variant": "#3f4944",
+                        "inverse-primary": "#84d6b9",
+                        "tertiary-fixed-dim": "#9dd770",
+                        "primary-fixed-dim": "#84d6b9",
+                        "secondary": "#50625d",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "surface-container": "#efeded",
+                        "on-primary-fixed": "#002117",
+                        "secondary-fixed-dim": "#b7cbc4",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#0c2000",
+                        "on-background": "#1b1c1c",
+                        "tertiary": "#275300",
+                        "on-tertiary-fixed-variant": "#265100",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#394a45"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit-md": "16px",
+                        "unit-xl": "32px",
+                        "container-margin": "16px",
+                        "gutter": "12px",
+                        "unit-lg": "24px",
+                        "section-gap": "24px",
+                        "unit-sm": "8px",
+                        "unit-xs": "4px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Plus Jakarta Sans", "sans-serif"],
+                        "h1": ["Plus Jakarta Sans", "sans-serif"],
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased pb-24">
+<!-- TopAppBar -->
+<header class="bg-[#0F6E56] dark:bg-[#0A4D3C] flex justify-between items-center px-4 py-3 w-full docked full-width top-0 shadow-sm transition-colors duration-200 sticky z-40">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white dark:text-teal-50 font-label-md text-label-md overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional, minimalist headshot of a modern Indonesian user, soft studio lighting, light background, signaling trust and sophisticated simplicity in a financial app context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6t6L6Izic3oVIGhoxCf19BxoDWHgs8-DnsHzPgYByrdgm20QGhYaelpsNBXdigI_-Vfzsng8si4xV39_IvabrkfQIAMbybn-plkMCRU3gE_zuC9NXqJRdnQjfIm6QLOyMtFUVMSiYqz1_8i08KBweW253_n_TJrOdm72qW45dhguLPrgyBxqc5gl2pbbk69QalpGUviSfsV9Sid-carwHkeai2I8zXamqePHj9SR6jcZDF4sQIezX2rZb2-wBx72rIxlI_4xBhwTD"/>
+</div>
+<span class="text-xl font-bold text-white font-['Plus_Jakarta_Sans'] font-semibold">KasCahh</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-white dark:text-teal-50 hover:bg-teal-700/50 transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="px-container-margin pt-unit-lg space-y-section-gap">
+<!-- Header & Summary Card -->
+<section class="space-y-unit-md">
+<h1 class="font-h1 text-h1 text-on-surface">Catatan Pengeluaran</h1>
+<div class="bg-surface rounded-xl p-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)] flex flex-col gap-unit-md relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl"></div>
+<div class="flex justify-between items-end relative z-10">
+<div class="space-y-1">
+<p class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Total Bulan Ini</p>
+<p class="font-display text-display text-primary">Rp 450.000</p>
+</div>
+<!-- Mini Bar Chart Abstract -->
+<div class="flex items-end gap-1.5 h-12 opacity-80">
+<div class="w-2 bg-surface-variant rounded-t-sm h-1/3"></div>
+<div class="w-2 bg-surface-variant rounded-t-sm h-1/2"></div>
+<div class="w-2 bg-surface-variant rounded-t-sm h-3/4"></div>
+<div class="w-2 bg-primary rounded-t-sm h-full"></div>
+<div class="w-2 bg-surface-variant rounded-t-sm h-2/5"></div>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<button class="w-full bg-primary text-on-primary rounded-xl py-3 px-4 font-label-md text-label-md flex items-center justify-center gap-2 shadow-[0_8px_20px_rgba(0,0,0,0.08)] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Tambah Pengeluaran
+            </button>
+</section>
+<!-- Expense List -->
+<section class="space-y-unit-lg">
+<!-- Group 1: Hari Ini -->
+<div class="space-y-unit-sm">
+<h2 class="font-label-md text-label-md text-outline tracking-wide pl-1">Hari Ini, 24 Okt 2023</h2>
+<div class="space-y-2">
+<!-- Item 1 -->
+<div class="bg-surface rounded-xl p-unit-md flex items-center gap-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="w-10 h-10 rounded-lg bg-error-container/20 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="restaurant">restaurant</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-h2 text-h2 text-on-surface truncate text-[16px]">Konsumsi</p>
+<p class="font-label-sm text-label-sm text-outline truncate">Makan Siang Tim</p>
+</div>
+<div class="text-right shrink-0">
+<p class="font-label-md text-label-md text-error">-Rp 150.000</p>
+<p class="font-label-sm text-label-sm text-outline-variant">12:30</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface rounded-xl p-unit-md flex items-center gap-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/30 text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="local_taxi">local_taxi</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-h2 text-h2 text-on-surface truncate text-[16px]">Transportasi</p>
+<p class="font-label-sm text-label-sm text-outline truncate">Taksi ke Kantor Klien</p>
+</div>
+<div class="text-right shrink-0">
+<p class="font-label-md text-label-md text-error">-Rp 75.000</p>
+<p class="font-label-sm text-label-sm text-outline-variant">09:15</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 2: Kemarin -->
+<div class="space-y-unit-sm">
+<h2 class="font-label-md text-label-md text-outline tracking-wide pl-1">Kemarin, 23 Okt 2023</h2>
+<div class="space-y-2">
+<!-- Item 3 -->
+<div class="bg-surface rounded-xl p-unit-md flex items-center gap-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="home_repair_service">home_repair_service</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-h2 text-h2 text-on-surface truncate text-[16px]">Perlengkapan</p>
+<p class="font-label-sm text-label-sm text-outline truncate">Tinta Printer &amp; Kertas HVS</p>
+</div>
+<div class="text-right shrink-0">
+<p class="font-label-md text-label-md text-error">-Rp 225.000</p>
+<p class="font-label-sm text-label-sm text-outline-variant">14:00</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-gray-100 dark:border-gray-800 shadow-[0_-4px_12px_rgba(0,0,0,0.04)] bg-white dark:bg-gray-900 fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-3 pb-safe font-['Plus_Jakarta_Sans'] text-[12px] font-medium">
+<!-- Beranda (Inactive) -->
+<button class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform w-16 h-12 rounded-lg">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="text-[10px]">Beranda</span>
+</button>
+<!-- Anggota (Inactive) -->
+<button class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform w-16 h-12 rounded-lg">
+<span class="material-symbols-outlined mb-1" data-icon="group">group</span>
+<span class="text-[10px]">Anggota</span>
+</button>
+<!-- Catatan (Active) -->
+<button class="flex flex-col items-center justify-center text-[#0F6E56] dark:text-[#E1F5EE] font-bold hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform w-16 h-12 rounded-lg">
+<span class="material-symbols-outlined mb-1" data-icon="description" data-weight="fill">description</span>
+<span class="text-[10px]">Catatan</span>
+</button>
+<!-- Pengaturan (Inactive) -->
+<button class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform w-16 h-12 rounded-lg">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="text-[10px]">Pengaturan</span>
+</button>
+</nav>
+</body></html>

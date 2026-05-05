@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pengaturan - KasCahh</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dbdad9",
+                    "surface-variant": "#e4e2e2",
+                    "on-primary-fixed-variant": "#00513e",
+                    "on-tertiary-container": "#b2ed83",
+                    "primary": "#005440",
+                    "secondary-fixed": "#d3e7e0",
+                    "surface-bright": "#fbf9f8",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#a0f3d4",
+                    "tertiary-container": "#3b6d11",
+                    "on-secondary-fixed": "#0d1f1b",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f5f3f3",
+                    "outline-variant": "#bec9c3",
+                    "on-secondary-container": "#566863",
+                    "primary-container": "#0f6e56",
+                    "surface-tint": "#086b53",
+                    "secondary-container": "#d3e7e0",
+                    "on-primary-container": "#9aedcf",
+                    "background": "#fbf9f8",
+                    "outline": "#6f7a74",
+                    "surface-container-high": "#e9e8e7",
+                    "inverse-surface": "#303031",
+                    "on-surface": "#1b1c1c",
+                    "tertiary-fixed": "#b8f389",
+                    "inverse-on-surface": "#f2f0f0",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface": "#fbf9f8",
+                    "on-surface-variant": "#3f4944",
+                    "inverse-primary": "#84d6b9",
+                    "tertiary-fixed-dim": "#9dd770",
+                    "primary-fixed-dim": "#84d6b9",
+                    "secondary": "#50625d",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e4e2e2",
+                    "surface-container": "#efeded",
+                    "on-primary-fixed": "#002117",
+                    "secondary-fixed-dim": "#b7cbc4",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#0c2000",
+                    "on-background": "#1b1c1c",
+                    "tertiary": "#275300",
+                    "on-tertiary-fixed-variant": "#265100",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#394a45"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit-md": "16px",
+                    "unit-xl": "32px",
+                    "container-margin": "16px",
+                    "gutter": "12px",
+                    "unit-lg": "24px",
+                    "section-gap": "24px",
+                    "unit-sm": "8px",
+                    "unit-xs": "4px"
+            },
+            "fontFamily": {
+                    "h2": [
+                            "plusJakartaSans"
+                    ],
+                    "h1": [
+                            "plusJakartaSans"
+                    ],
+                    "display": [
+                            "plusJakartaSans"
+                    ],
+                    "body-lg": [
+                            "plusJakartaSans"
+                    ],
+                    "body-md": [
+                            "plusJakartaSans"
+                    ],
+                    "label-md": [
+                            "plusJakartaSans"
+                    ],
+                    "label-sm": [
+                            "plusJakartaSans"
+                    ]
+            },
+            "fontSize": {
+                    "h2": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "h1": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "10px",
+                            {
+                                    "lineHeight": "14px",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Hide scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen relative flex justify-center">
+<!-- Mobile Wrapper for App-like feel -->
+<div class="w-full max-w-md bg-background min-h-screen relative shadow-2xl">
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 max-w-md z-50 bg-[#0F6E56] dark:bg-[#0A4D3C] font-['Plus_Jakarta_Sans'] font-semibold shadow-sm transition-colors duration-200 flex justify-between items-center px-4 py-3 w-full">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold overflow-hidden shrink-0">
+<span class="font-label-md text-label-md text-on-surface-variant">JD</span>
+</div>
+<h1 class="text-xl font-bold text-white text-white dark:text-teal-50">KasCahh</h1>
+</div>
+<button class="text-white dark:text-teal-50 hover:bg-teal-700/50 p-2 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[80px] pb-[100px] px-container-margin flex flex-col gap-section-gap">
+<!-- Screen Header -->
+<header>
+<h1 class="font-display text-display text-on-background">Pengaturan</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Kelola preferensi dan sistem kas kelompok.</p>
+</header>
+<!-- Section: Iuran Default -->
+<section class="bg-surface-container-lowest rounded-[16px] p-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-2 mb-unit-md">
+<span class="material-symbols-outlined text-primary-container">payments</span>
+<h2 class="font-h2 text-h2 text-on-background">Iuran Default</h2>
+</div>
+<div class="flex flex-col gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Nominal Iuran (Rp)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant">Rp</span>
+<input class="w-full bg-surface rounded-[12px] border border-secondary-container pl-12 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" type="text" value="50.000"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Frekuensi</label>
+<div class="relative">
+<select class="w-full bg-surface rounded-[12px] border border-secondary-container px-4 py-3 font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all">
+<option>Bulanan</option>
+<option>Mingguan</option>
+<option>Harian</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Hari Tagihan</label>
+<div class="relative">
+<select class="w-full bg-surface rounded-[12px] border border-secondary-container px-4 py-3 font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all">
+<option>Tanggal 1</option>
+<option>Tanggal 10</option>
+<option>Akhir Bulan</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Periode Kas -->
+<section class="bg-surface-container-lowest rounded-[16px] p-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-2 mb-unit-md">
+<span class="material-symbols-outlined text-primary-container">calendar_month</span>
+<h2 class="font-h2 text-h2 text-on-background">Periode Kas</h2>
+</div>
+<div class="flex flex-col gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Nama Periode</label>
+<input class="w-full bg-surface rounded-[12px] border border-secondary-container px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" type="text" value="Kas RT 04 Tahun 2024"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Mulai Periode</label>
+<div class="relative">
+<input class="w-full bg-surface rounded-[12px] border border-secondary-container px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" type="date" value="2024-01-01"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Notifikasi -->
+<section class="bg-surface-container-lowest rounded-[16px] p-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-2 mb-unit-md">
+<span class="material-symbols-outlined text-primary-container">notifications_active</span>
+<h2 class="font-h2 text-h2 text-on-background">Notifikasi</h2>
+</div>
+<div class="flex flex-col gap-0">
+<div class="flex justify-between items-center py-3 border-b border-surface-container-high">
+<div class="pr-4">
+<p class="font-body-lg text-body-lg text-on-background font-medium">Pengingat Tagihan</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Kirim notifikasi H-1 sebelum jatuh tempo</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0F6E56]"></div>
+</label>
+</div>
+<div class="flex justify-between items-center py-3">
+<div class="pr-4">
+<p class="font-body-lg text-body-lg text-on-background font-medium">Laporan Bulanan</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Terima ringkasan kas setiap akhir bulan</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0F6E56]"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section: Data -->
+<section class="bg-surface-container-lowest rounded-[16px] p-unit-md shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+<div class="flex items-center gap-2 mb-unit-md">
+<span class="material-symbols-outlined text-primary-container">database</span>
+<h2 class="font-h2 text-h2 text-on-background">Data Kas</h2>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full flex items-center justify-center gap-2 bg-secondary-container text-[#0F6E56] py-3.5 rounded-xl font-label-md text-label-md transition-colors hover:bg-secondary-fixed">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                        Export Data ke CSV
+                    </button>
+<button class="w-full flex items-center justify-center gap-2 bg-error-container text-on-error-container py-3.5 rounded-xl font-label-md text-label-md transition-colors hover:bg-error hover:text-on-error">
+<span class="material-symbols-outlined text-[20px]">delete_forever</span>
+                        Reset Semua Data Kas
+                    </button>
+</div>
+</section>
+<!-- Footer -->
+<div class="text-center mt-2 mb-4">
+<p class="font-label-sm text-label-sm text-outline">KasCahh v1.0</p>
+</div>
+</main>
+<!-- BottomNavBar (Shared Component) -->
+<nav class="bg-white dark:bg-gray-900 font-['Plus_Jakarta_Sans'] text-[12px] font-medium fixed bottom-0 w-full z-50 border-t border-t border-gray-100 dark:border-gray-800 shadow-[0_-4px_12px_rgba(0,0,0,0.04)] fixed bottom-0 left-0 w-full flex justify-around items-center px-2 py-3 pb-safe max-w-md">
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span>Beranda</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1">group</span>
+<span>Anggota</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined mb-1">description</span>
+<span>Catatan</span>
+</a>
+<!-- Active Nav Item: Pengaturan -->
+<a class="flex flex-col items-center justify-center text-[#0F6E56] dark:text-[#E1F5EE] font-bold hover:bg-gray-50 dark:hover:bg-gray-800 scale-95 active:scale-90 transition-transform p-2 rounded-lg w-16" href="#">
+<span class="material-symbols-outlined fill mb-1">settings</span>
+<span>Pengaturan</span>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tambah Pengeluaran</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dbdad9",
+                      "surface-variant": "#e4e2e2",
+                      "on-primary-fixed-variant": "#00513e",
+                      "on-tertiary-container": "#b2ed83",
+                      "primary": "#005440",
+                      "secondary-fixed": "#d3e7e0",
+                      "surface-bright": "#fbf9f8",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#a0f3d4",
+                      "tertiary-container": "#3b6d11",
+                      "on-secondary-fixed": "#0d1f1b",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f5f3f3",
+                      "outline-variant": "#bec9c3",
+                      "on-secondary-container": "#566863",
+                      "primary-container": "#0f6e56",
+                      "surface-tint": "#086b53",
+                      "secondary-container": "#d3e7e0",
+                      "on-primary-container": "#9aedcf",
+                      "background": "#fbf9f8",
+                      "outline": "#6f7a74",
+                      "surface-container-high": "#e9e8e7",
+                      "inverse-surface": "#303031",
+                      "on-surface": "#1b1c1c",
+                      "tertiary-fixed": "#b8f389",
+                      "inverse-on-surface": "#f2f0f0",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface": "#fbf9f8",
+                      "on-surface-variant": "#3f4944",
+                      "inverse-primary": "#84d6b9",
+                      "tertiary-fixed-dim": "#9dd770",
+                      "primary-fixed-dim": "#84d6b9",
+                      "secondary": "#50625d",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e4e2e2",
+                      "surface-container": "#efeded",
+                      "on-primary-fixed": "#002117",
+                      "secondary-fixed-dim": "#b7cbc4",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#0c2000",
+                      "on-background": "#1b1c1c",
+                      "tertiary": "#275300",
+                      "on-tertiary-fixed-variant": "#265100",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#394a45"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit-md": "16px",
+                      "unit-xl": "32px",
+                      "container-margin": "16px",
+                      "gutter": "12px",
+                      "unit-lg": "24px",
+                      "section-gap": "24px",
+                      "unit-sm": "8px",
+                      "unit-xs": "4px"
+              },
+              "fontFamily": {
+                      "h2": ["Plus Jakarta Sans", "sans-serif"],
+                      "h1": ["Plus Jakarta Sans", "sans-serif"],
+                      "display": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                      "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                      "label-sm": ["Plus Jakarta Sans", "sans-serif"]
+              },
+              "fontSize": {
+                      "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for horizontal chips */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- App Container (Mobile Viewport Simulation) -->
+<main class="relative w-full max-w-md mx-auto h-screen min-h-[800px] overflow-hidden bg-surface-container-low shadow-2xl flex flex-col">
+<!-- Dummy Background Canvas (Blurred/Dimmed to simulate modal context) -->
+<div class="flex-1 w-full bg-cover bg-center filter blur-sm scale-105 opacity-80" data-alt="A soft, abstract architectural composition featuring flowing curves and minimalist geometry. The scene is rendered in high-key, pristine whites and extremely subtle organic tones, embodying a modern, sophisticated aesthetic. The lighting is diffused and ambient, creating a calm, uncluttered background that perfectly complements a sleek digital interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBwdVBnW_QMMGvPpqYxw7O8vOLVs8txb3WFeW_Tb--8eCLUwwMlrBcg_sYMrIa8NpJ3toE2hNn4RvfzLEwTdyV8AtXEGR-kPcDCVU_aOCtPHcea8soVZeQ2wSBH0LEtembc5qO8KAKDs3MVfqnC_RDxD24jNtYXf_r_br5kX-n0cAc_dgyf-2hytahOpXyDJzWHcuHtQOJw4wLAPlI2EuQQ1ppb_xAiYaL33Sg6c7RHbTeUCxNk_T_iXFy4bB6EPJ-0g1vH5qKlJQR');">
+<!-- Simulated underlying app content structure -->
+<div class="p-4 pt-12 flex flex-col gap-6 opacity-60">
+<div class="h-24 w-full bg-surface-container-lowest rounded-xl"></div>
+<div class="h-48 w-full bg-surface-container-lowest rounded-xl"></div>
+<div class="h-32 w-full bg-surface-container-lowest rounded-xl"></div>
+</div>
+</div>
+<!-- Dimming Overlay -->
+<div class="absolute inset-0 bg-inverse-surface/60 z-40 backdrop-blur-[2px]"></div>
+<!-- Bottom Sheet Modal -->
+<div class="absolute bottom-0 left-0 w-full bg-surface-container-lowest rounded-t-[32px] z-50 flex flex-col shadow-[0_-12px_40px_rgba(0,0,0,0.12)] max-h-[795px] overflow-y-auto">
+<!-- Drag Handle & Header Section -->
+<div class="sticky top-0 bg-surface-container-lowest z-10 rounded-t-[32px] px-unit-md pt-4 pb-2 border-b border-surface-container">
+<!-- Handle -->
+<div class="w-12 h-1.5 bg-surface-container-highest rounded-full mx-auto mb-4"></div>
+<div class="flex justify-between items-center mb-2">
+<h1 class="font-h1 text-h1 text-on-surface">Tambah Pengeluaran</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Form Content -->
+<div class="p-unit-md flex flex-col gap-unit-lg pb-unit-xl">
+<!-- Nominal Input (Large Prominent) -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nominal</label>
+<div class="relative flex items-center bg-surface-bright rounded-[16px] border border-outline-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all p-4">
+<span class="font-display text-display text-on-surface mr-2">Rp</span>
+<input class="w-full bg-transparent border-none outline-none font-display text-display text-on-surface placeholder:text-outline-variant p-0 focus:ring-0 appearance-none" placeholder="0" style="-moz-appearance: textfield;" type="number"/>
+</div>
+</div>
+<!-- Category Chips -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Kategori</label>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-1 pt-1 -mx-unit-md px-unit-md">
+<!-- Active Chip -->
+<button class="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md transition-all shrink-0 border border-primary-fixed">
+<span class="material-symbols-outlined text-[18px] icon-fill">restaurant</span>
+                            Konsumsi
+                        </button>
+<!-- Inactive Chips -->
+<button class="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all shrink-0 border border-transparent">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+                            Perlengkapan
+                        </button>
+<button class="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all shrink-0 border border-transparent">
+<span class="material-symbols-outlined text-[18px]">directions_car</span>
+                            Transportasi
+                        </button>
+<button class="flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all shrink-0 border border-transparent">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                            Tagihan
+                        </button>
+</div>
+</div>
+<!-- Keterangan Input -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Keterangan</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">notes</span>
+</div>
+<input class="w-full bg-surface-bright border border-outline-variant text-on-surface font-body-lg text-body-lg rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline" placeholder="Contoh: Makan siang dengan klien" type="text"/>
+</div>
+</div>
+<!-- Tanggal Input -->
+<div class="flex flex-col gap-unit-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tanggal</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+</div>
+<input class="w-full bg-surface-bright border border-outline-variant text-on-surface font-body-lg text-body-lg rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none" type="date" value="2023-10-24"/>
+</div>
+</div>
+<!-- Spacer to push CTA slightly down if needed, though gap handles it mostly -->
+<div class="h-2"></div>
+<!-- CTA Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-h2 text-h2 py-4 px-6 rounded-[16px] shadow-sm hover:opacity-90 active:scale-[0.98] transition-all flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                    Simpan Pengeluaran
+                </button>
+</div>
+</div>
+</main>
+</body></html>
