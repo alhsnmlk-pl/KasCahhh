@@ -323,6 +323,6 @@ Dibuat menggunakan Flutter oleh **Al**
 
 **⭐ Star project ini jika bermanfaat!**
 
-Made with Flutter 💙
+Made with Flutter 
 
 </div>
