@@ -6,6 +6,7 @@
 ![Dart](https://img.shields.io/badge/Dart-3.11.5+-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-Private-red)
 ![Status](https://img.shields.io/badge/Status-Experimental-orange)
+![AI](https://img.shields.io/badge/Made_with-AI-blueviolet?logo=openai)
 
 Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
@@ -17,15 +18,17 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 ## ⚠️ Disclaimer
 
-> **🎨 FULL VIBE CODING PROJECT**
+> **🤖 FULL VIBE CODING PROJECT - 100% AI GENERATED**
 > 
-> Aplikasi ini dibuat sebagai **percobaan dan eksperimen** dalam pengembangan aplikasi Flutter.
+> Aplikasi ini dibuat **sepenuhnya menggunakan AI** sebagai **percobaan dan eksperimen** dalam pengembangan aplikasi Flutter.
 > Ini adalah project pembelajaran dan tidak dimaksudkan untuk penggunaan production yang serius.
 > 
-> - ✨ Dibuat dengan semangat eksplorasi dan kreativitas
+> - 🤖 **Dibuat 100% dengan bantuan AI** (Kiro AI Assistant)
+> - ✨ Full vibe coding - dari konsep hingga deployment
 > - 🧪 Masih dalam tahap eksperimental
-> - 📚 Tujuan utama: belajar dan bersenang-senang dengan Flutter
+> - 📚 Tujuan utama: demonstrasi kemampuan AI dalam software development
 > - ⚡ Gunakan dengan bijak dan untuk keperluan testing/learning
+> - 🎯 Proof of concept: AI-powered app development
 
 ---
 
@@ -347,13 +350,20 @@ Private project - tidak untuk dipublikasikan ke pub.dev
 
 Dibuat dengan ❤️ dan ☕ menggunakan Flutter oleh **Al**
 
-> *"Full vibe coding, no stress, just vibes!"* 🎨✨
+> *"Full vibe coding, no stress, just vibes!"* 🎨✨  
+> *"100% AI-powered development - from idea to deployment!"* 🤖💙
 
 ### Contact
 - 📧 Email: alasama351@gmail.com
 
 ### About This Project
-Project ini dibuat dengan pendekatan **vibe coding** - fokus pada eksplorasi, kreativitas, dan pembelajaran tanpa tekanan. Setiap line of code ditulis dengan semangat eksperimen dan kesenangan dalam coding! 🚀
+Project ini dibuat dengan pendekatan **vibe coding** menggunakan **100% AI assistance** - fokus pada eksplorasi, kreativitas, dan pembelajaran tanpa tekanan. Setiap line of code ditulis dengan bantuan AI (Kiro AI Assistant) dengan semangat eksperimen dan kesenangan dalam coding! 🚀
+
+**Tech Stack:**
+- 🤖 AI Assistant: Kiro AI
+- 💙 Framework: Flutter
+- 🎨 Approach: Vibe Coding
+- ⚡ Development: Fully AI-Generated
 
 ---
 
@@ -361,6 +371,8 @@ Project ini dibuat dengan pendekatan **vibe coding** - fokus pada eksplorasi, kr
 
 **⭐ Star project ini jika bermanfaat!**
 
-Made with Flutter 💙 | Full Vibe Coding 🎨
+Made with Flutter 💙 | Full Vibe Coding 🎨 | 100% AI Generated 🤖
+
+*Powered by Kiro AI Assistant*
 
 </div>
