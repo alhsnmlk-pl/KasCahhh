@@ -5,12 +5,43 @@
 ![Flutter](https://img.shields.io/badge/Flutter-3.11.5+-02569B?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.11.5+-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-Private-red)
+![Status](https://img.shields.io/badge/Status-Experimental-orange)
 
 Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
-[Fitur](#-fitur-utama) • [Instalasi](#-cara-menjalankan) • [Dokumentasi](#-struktur-project) • [Build](#-build-production)
+[Fitur](#-fitur-utama) • [Download](#-download-apk) • [Instalasi](#-cara-menjalankan) • [Dokumentasi](#-struktur-project)
 
 </div>
+
+---
+
+## ⚠️ Disclaimer
+
+> **🎨 FULL VIBE CODING PROJECT**
+> 
+> Aplikasi ini dibuat sebagai **percobaan dan eksperimen** dalam pengembangan aplikasi Flutter.
+> Ini adalah project pembelajaran dan tidak dimaksudkan untuk penggunaan production yang serius.
+> 
+> - ✨ Dibuat dengan semangat eksplorasi dan kreativitas
+> - 🧪 Masih dalam tahap eksperimental
+> - 📚 Tujuan utama: belajar dan bersenang-senang dengan Flutter
+> - ⚡ Gunakan dengan bijak dan untuk keperluan testing/learning
+
+---
+
+## 📥 Download APK
+
+### Latest Release: v1.0.0
+
+📦 **[Download KasCahh v1.0.0 (51.1 MB)](releases/KasCahh-v1.0.0-release.apk)**
+
+#### Cara Install:
+1. Download file APK dari link di atas
+2. Buka file APK di device Android
+3. Izinkan instalasi dari sumber tidak dikenal (jika diminta)
+4. Install dan jalankan aplikasi
+
+> **Note**: APK ini adalah unsigned release build. Untuk production, sebaiknya menggunakan signed APK.
 
 ---
 
@@ -308,14 +339,21 @@ Ini adalah private project. Jika ingin berkontribusi:
 
 Private project - tidak untuk dipublikasikan ke pub.dev
 
+**Disclaimer**: Ini adalah project eksperimental untuk pembelajaran dan percobaan. Gunakan dengan bijak.
+
 ---
 
 ## 👨‍💻 Developer
 
-Dibuat menggunakan Flutter oleh **Al**
+Dibuat dengan ❤️ dan ☕ menggunakan Flutter oleh **Al**
+
+> *"Full vibe coding, no stress, just vibes!"* 🎨✨
 
 ### Contact
 - 📧 Email: alasama351@gmail.com
+
+### About This Project
+Project ini dibuat dengan pendekatan **vibe coding** - fokus pada eksplorasi, kreativitas, dan pembelajaran tanpa tekanan. Setiap line of code ditulis dengan semangat eksperimen dan kesenangan dalam coding! 🚀
 
 ---
 
@@ -323,6 +361,6 @@ Dibuat menggunakan Flutter oleh **Al**
 
 **⭐ Star project ini jika bermanfaat!**
 
-Made with Flutter 
+Made with Flutter 💙 | Full Vibe Coding 🎨
 
 </div>
