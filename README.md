@@ -92,7 +92,7 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 | Dashboard | Anggota | Pembayaran | Pengaturan |
 |-----------|---------|------------|------------|
-| ![Dashboard](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/dashboard.png) | ![Anggota](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/anggota.png) | ![Pembayaran](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/main/blob/screenshots/pembayaran.png) | ![Pengaturan](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/pengaturan.png) |
+| ![Dashboard](https://github.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/dashboard.png) | ![Anggota](https://github.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/anggota.png) | ![Pembayaran](https://github.com/alhsnmlk-pl/KasCahhh/main/blob/screenshots/pembayaran.png) | ![Pengaturan](https://github.com/alhsnmlk-pl/KasCahhh/blob/main/screenshots/pengaturan.png) |
 
 </div>
 
