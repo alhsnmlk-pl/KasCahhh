@@ -96,7 +96,7 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 </div>
 
-> **Note**: Untuk menampilkan screenshot, buat folder `screenshots/` di root project dan tambahkan file: `dashboard.png`, `anggota.png`, `pembayaran.png`, `pengaturan.png`, lalu push ke GitHub.
+<!-- > **Note**: Untuk menampilkan screenshot, buat folder `screenshots/` di root project dan tambahkan file: `dashboard.png`, `anggota.png`, `pembayaran.png`, `pengaturan.png`, lalu push ke GitHub. -->
 
 ---
 
