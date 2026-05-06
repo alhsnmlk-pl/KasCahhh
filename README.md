@@ -36,10 +36,10 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 ### Latest Release: v1.0.0
 
-📦 **[Download KasCahh v1.0.0 (51.1 MB)](releases/KasCahh-v1.0.0-release.apk)**
+📦 **[Download KasCahh v1.0.0 → GitHub Releases](https://github.com/alhsnmlk-pl/KasCahhh/releases/latest)**
 
 #### Cara Install:
-1. Download file APK dari link di atas
+1. Buka link di atas dan download file `.apk` dari bagian **Assets**
 2. Buka file APK di device Android
 3. Izinkan instalasi dari sumber tidak dikenal (jika diminta)
 4. Install dan jalankan aplikasi
@@ -86,17 +86,17 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 - Atur periode kas
 - Reset data
 
-## � Screenshots
+## 📸 Screenshots
 
 <div align="center">
 
 | Dashboard | Anggota | Pembayaran | Pengaturan |
 |-----------|---------|------------|------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Anggota](screenshots/anggota.png) | ![Pembayaran](screenshots/pembayaran.png) | ![Pengaturan](screenshots/pengaturan.png) |
+| ![Dashboard](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/main/screenshots/dashboard.png) | ![Anggota](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/main/screenshots/anggota.png) | ![Pembayaran](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/main/screenshots/pembayaran.png) | ![Pengaturan](https://raw.githubusercontent.com/alhsnmlk-pl/KasCahhh/main/screenshots/pengaturan.png) |
 
 </div>
 
-> **Note**: Tambahkan screenshot aplikasi di folder `screenshots/`
+> **Note**: Untuk menampilkan screenshot, buat folder `screenshots/` di root project dan tambahkan file: `dashboard.png`, `anggota.png`, `pembayaran.png`, `pengaturan.png`, lalu push ke GitHub.
 
 ---
 
