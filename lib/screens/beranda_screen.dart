@@ -8,9 +8,11 @@ import '../widgets/stat_card.dart';
 import '../widgets/summary_row.dart';
 import '../widgets/member_card.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/foto_profil_widget.dart';
 import 'anggota_screen.dart';
 import 'catat_pembayaran_sheet.dart';
 import 'detail_anggota_screen.dart';
+import 'tambah_pemasukan_sheet.dart';
 
 class BerandaScreen extends StatefulWidget {
   const BerandaScreen({super.key});
@@ -35,26 +37,11 @@ class _BerandaScreenState extends State<BerandaScreen> {
         titleSpacing: 16,
         title: Row(
           children: [
-            if (data.fotoAplikasi != null)
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: MemoryImage(data.fotoAplikasi!),
-              )
-            else
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.monetization_on,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
+            FotoProfilWidget(
+              fotoPath: data.fotoAplikasiPath,
+              inisial: data.initialAplikasi,
+              radius: 16,
+            ),
             const SizedBox(width: 12),
             Text(
               data.namaAplikasi,
@@ -257,17 +244,30 @@ class _BerandaScreenState extends State<BerandaScreen> {
                     child: Column(
                       children: [
                         SummaryRow(
-                          icon: Icons.arrow_downward,
+                          icon: Icons.payments,
                           iconColor: colorScheme.tertiaryContainer,
                           iconBgColor: colorScheme.tertiaryContainer.withValues(
                             alpha: 0.1,
                           ),
-                          label: 'Pemasukan',
+                          label: 'Pemasukan Iuran',
                           amount:
-                              '+${AppData.formatRupiah(data.pemasukanBulanIni)}',
+                              '+${AppData.formatRupiah(data.pemasukanBulanIni - data.pemasukanLainBulanIni)}',
                           amountColor: colorScheme.tertiaryContainer,
                         ),
-                        const Divider(height: 32, color: Color(0xFFE4E2E2)),
+                        const Divider(height: 24, color: Color(0xFFE4E2E2)),
+                        SummaryRow(
+                          icon: Icons.add_circle_outline,
+                          iconColor: const Color(0xFF0F6E56),
+                          iconBgColor: const Color(
+                            0xFF0F6E56,
+                          ).withValues(alpha: 0.1),
+                          label: 'Pemasukan Lain',
+                          amount:
+                              '+${AppData.formatRupiah(data.pemasukanLainBulanIni)}',
+                          amountColor: const Color(0xFF0F6E56),
+                          onTap: () => showTambahPemasukanSheet(context),
+                        ),
+                        const Divider(height: 24, color: Color(0xFFE4E2E2)),
                         SummaryRow(
                           icon: Icons.arrow_upward,
                           iconColor: colorScheme.error,
@@ -384,7 +384,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
                           name: a.nama,
                           status: statusText,
                           anggotaId: a.id,
-                          fotoProfil: a.fotoProfil,
+                          fotoProfilPath: a.fotoProfilPath,
                           onTap: () {
                             Navigator.push(
                               context,

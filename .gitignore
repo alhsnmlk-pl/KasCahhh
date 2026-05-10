@@ -46,3 +46,16 @@ app.*.map.json
 
 # APK releases (upload ke GitHub Releases, bukan di repo)
 /releases/*.apk
+
+# Keystore files - NEVER commit these!
+*.jks
+*.keystore
+keystore.properties
+key.properties
+
+# Environment variables & Supabase credentials - NEVER commit these!
+.env
+*.env
+.env.*
+supabase_config.dart
+*_credentials.dart

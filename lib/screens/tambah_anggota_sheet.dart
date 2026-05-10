@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../main.dart';
 import '../models/app_data.dart';
+import '../services/storage_service.dart';
+import '../utils/validators.dart';
 
 // ─── Show Helper ─────────────────────────────────────────────────────────────
 
@@ -34,6 +36,7 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _namaCtrl;
   Uint8List? _fotoProfil;
+  String? _fotoPath;
 
   bool get _isEdit => widget.anggota != null;
 
@@ -42,7 +45,17 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
     super.initState();
     final a = widget.anggota;
     _namaCtrl = TextEditingController(text: a?.nama ?? '');
-    _fotoProfil = a?.fotoProfil;
+    _fotoPath = a?.fotoProfilPath;
+    _loadFoto();
+  }
+
+  Future<void> _loadFoto() async {
+    if (_fotoPath != null) {
+      final bytes = await StorageService.loadFotoProfil(_fotoPath);
+      if (mounted) {
+        setState(() => _fotoProfil = bytes);
+      }
+    }
   }
 
   @override
@@ -55,12 +68,13 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
     if (!_formKey.currentState!.validate()) return;
 
     final data = AppDataProvider.of(context);
+    final namaSanitized = Validators.sanitizeInput(_namaCtrl.text.trim());
 
     if (_isEdit) {
       data.editAnggota(
         widget.anggota!.id,
-        nama: _namaCtrl.text.trim(),
-        fotoProfil: _fotoProfil,
+        nama: namaSanitized,
+        fotoProfilPath: _fotoPath,
       );
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -70,10 +84,7 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
         ),
       );
     } else {
-      data.tambahAnggota(
-        nama: _namaCtrl.text.trim(),
-        fotoProfil: _fotoProfil,
-      );
+      data.tambahAnggota(nama: namaSanitized, fotoProfilPath: _fotoPath);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -163,13 +174,62 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
                       right: 0,
                       child: InkWell(
                         onTap: () async {
+                          if (!mounted) return;
+
+                          final messenger = ScaffoldMessenger.of(context);
                           final picker = ImagePicker();
                           final file = await picker.pickImage(
                             source: ImageSource.gallery,
+                            maxWidth: 800,
+                            maxHeight: 800,
+                            imageQuality: 85,
                           );
+
+                          if (!mounted) return;
+
                           if (file != null) {
                             final bytes = await file.readAsBytes();
-                            setState(() => _fotoProfil = bytes);
+
+                            // Validasi ukuran file
+                            final sizeError = Validators.validateFileSize(
+                              bytes.length,
+                            );
+
+                            if (sizeError != null) {
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(sizeError),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            // Simpan foto ke file system
+                            try {
+                              final anggotaId =
+                                  widget.anggota?.id ??
+                                  DateTime.now().millisecondsSinceEpoch
+                                      .toString();
+                              final path = await StorageService.saveFotoProfil(
+                                anggotaId,
+                                bytes,
+                              );
+
+                              if (mounted) {
+                                setState(() {
+                                  _fotoProfil = bytes;
+                                  _fotoPath = path;
+                                });
+                              }
+                            } catch (e) {
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Gagal menyimpan foto: $e'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           }
                         },
                         child: Container(
@@ -209,12 +269,8 @@ class _TambahAnggotaSheetState extends State<TambahAnggotaSheet> {
                     TextFormField(
                       controller: _namaCtrl,
                       textCapitalization: TextCapitalization.words,
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return 'Nama tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                      maxLength: 50,
+                      validator: Validators.validateNama,
                       decoration: _inputDecoration(
                         hint: 'Masukkan nama anggota',
                         prefixIcon: Icons.person_outline,

@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/supabase_service.dart';
 
 // ─── Model ───────────────────────────────────────────────────────────────────
 
@@ -13,7 +14,7 @@ class Anggota {
   String frekuensi; // Harian / Mingguan / Bulanan
   Set<String> hariTagihan;
   List<Pembayaran> riwayatPembayaran;
-  Uint8List? fotoProfil;
+  String? fotoProfilPath; // Path ke file foto, bukan bytes
 
   Anggota({
     required this.id,
@@ -21,7 +22,7 @@ class Anggota {
     required this.nominalIuran,
     required this.frekuensi,
     required this.hariTagihan,
-    this.fotoProfil,
+    this.fotoProfilPath,
     List<Pembayaran>? riwayatPembayaran,
   }) : riwayatPembayaran = riwayatPembayaran ?? [];
 
@@ -43,7 +44,7 @@ class Anggota {
       'frekuensi': frekuensi,
       'hariTagihan': hariTagihan.toList(),
       'riwayatPembayaran': riwayatPembayaran.map((x) => x.toMap()).toList(),
-      'fotoProfil': fotoProfil != null ? base64Encode(fotoProfil!) : null,
+      'fotoProfilPath': fotoProfilPath,
     };
   }
 
@@ -57,9 +58,7 @@ class Anggota {
       riwayatPembayaran: List<Pembayaran>.from(
         map['riwayatPembayaran']?.map((x) => Pembayaran.fromMap(x)),
       ),
-      fotoProfil: map['fotoProfil'] != null
-          ? base64Decode(map['fotoProfil'])
-          : null,
+      fotoProfilPath: map['fotoProfilPath'],
     );
   }
 }
@@ -144,6 +143,42 @@ class Pengeluaran {
   }
 }
 
+class PemasukanLain {
+  final String id;
+  int nominal;
+  String kategori;
+  String keterangan;
+  DateTime tanggal;
+
+  PemasukanLain({
+    required this.id,
+    required this.nominal,
+    required this.kategori,
+    required this.keterangan,
+    required this.tanggal,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'nominal': nominal,
+      'kategori': kategori,
+      'keterangan': keterangan,
+      'tanggal': tanggal.toIso8601String(),
+    };
+  }
+
+  factory PemasukanLain.fromMap(Map<String, dynamic> map) {
+    return PemasukanLain(
+      id: map['id'],
+      nominal: map['nominal'],
+      kategori: map['kategori'],
+      keterangan: map['keterangan'],
+      tanggal: DateTime.parse(map['tanggal']),
+    );
+  }
+}
+
 // ─── Global Store ─────────────────────────────────────────────────────────────
 
 class AppData extends ChangeNotifier {
@@ -156,7 +191,7 @@ class AppData extends ChangeNotifier {
 
   // ─── Settings ───────────────────────────────────────────────────────────
   String namaAplikasi = 'KasCahh';
-  Uint8List? fotoAplikasi;
+  String? fotoAplikasiPath; // Path ke file foto, bukan bytes
 
   String get initialAplikasi {
     if (namaAplikasi.isEmpty) return 'KC';
@@ -181,19 +216,25 @@ class AppData extends ChangeNotifier {
   // ─── Data ───────────────────────────────────────────────────────────────
   List<Anggota> _anggota = [];
   List<Pengeluaran> _pengeluaran = [];
+  List<PemasukanLain> _pemasukanLain = [];
 
   List<Anggota> get anggota => List.unmodifiable(_anggota);
   List<Pengeluaran> get pengeluaran => List.unmodifiable(_pengeluaran);
+  List<PemasukanLain> get pemasukanLain => List.unmodifiable(_pemasukanLain);
 
-  // Persistence Logic
+  // Persistence Logic with debounce
+  bool _isSaving = false;
+  bool _isSyncing = false;
+
   Future<void> _saveToPrefs() async {
+    if (_isSaving) return; // Prevent concurrent saves
+
+    _isSaving = true;
     try {
       final prefs = await SharedPreferences.getInstance();
       final data = {
         'namaAplikasi': namaAplikasi,
-        'fotoAplikasi': fotoAplikasi != null
-            ? base64Encode(fotoAplikasi!)
-            : null,
+        'fotoAplikasiPath': fotoAplikasiPath,
         'nominalIuranDefault': nominalIuranDefault,
         'frekuensiDefault': frekuensiDefault,
         'hariTagihanDefault': hariTagihanDefault,
@@ -203,10 +244,30 @@ class AppData extends ChangeNotifier {
         'laporanBulanan': laporanBulanan,
         'anggota': _anggota.map((e) => e.toMap()).toList(),
         'pengeluaran': _pengeluaran.map((e) => e.toMap()).toList(),
+        'pemasukanLain': _pemasukanLain.map((e) => e.toMap()).toList(),
       };
       await prefs.setString('kascahh_data', jsonEncode(data));
     } catch (e) {
       debugPrint('Error saving data: $e');
+    } finally {
+      _isSaving = false;
+    }
+  }
+
+  /// Auto-sync ke Supabase setiap kali ada perubahan
+  Future<void> _autoSyncToSupabase() async {
+    // Skip jika Supabase tidak initialized atau sedang sync
+    if (!SupabaseService.isInitialized || _isSyncing) return;
+
+    _isSyncing = true;
+    try {
+      await SupabaseService.syncAll(this);
+      debugPrint('✅ Auto-sync to Supabase completed');
+    } catch (e) {
+      debugPrint('❌ Auto-sync failed: $e');
+      // Tidak throw error, biarkan app tetap jalan
+    } finally {
+      _isSyncing = false;
     }
   }
 
@@ -217,9 +278,7 @@ class AppData extends ChangeNotifier {
       if (jsonStr != null) {
         final Map<String, dynamic> data = jsonDecode(jsonStr);
         namaAplikasi = data['namaAplikasi'] ?? 'KasCahh';
-        fotoAplikasi = data['fotoAplikasi'] != null
-            ? base64Decode(data['fotoAplikasi'])
-            : null;
+        fotoAplikasiPath = data['fotoAplikasiPath'];
         nominalIuranDefault = data['nominalIuranDefault'] ?? 50000;
         frekuensiDefault = data['frekuensiDefault'] ?? 'Bulanan';
         hariTagihanDefault = data['hariTagihanDefault'] ?? 'Tanggal 1';
@@ -238,16 +297,74 @@ class AppData extends ChangeNotifier {
             (data['pengeluaran'] as List).map((e) => Pengeluaran.fromMap(e)),
           );
         }
+        if (data['pemasukanLain'] != null) {
+          _pemasukanLain = List<PemasukanLain>.from(
+            (data['pemasukanLain'] as List).map(
+              (e) => PemasukanLain.fromMap(e),
+            ),
+          );
+        }
         notifyListeners();
       }
+
+      // Setelah load dari local, coba sync dari Supabase
+      await _loadFromSupabase();
     } catch (e) {
       debugPrint('Error loading data: $e');
+    }
+  }
+
+  /// Load data dari Supabase saat app start
+  Future<void> _loadFromSupabase() async {
+    if (!SupabaseService.isInitialized) return;
+
+    try {
+      debugPrint('🔄 Loading data from Supabase...');
+      final result = await SupabaseService.fetchAll();
+
+      // Update data dari Supabase
+      if (result['settings'] != null) {
+        final settings = result['settings'] as Map<String, dynamic>;
+        namaAplikasi = settings['nama_aplikasi'] ?? namaAplikasi;
+        fotoAplikasiPath = settings['foto_aplikasi_path'] ?? fotoAplikasiPath;
+        nominalIuranDefault =
+            settings['nominal_iuran_default'] ?? nominalIuranDefault;
+        frekuensiDefault = settings['frekuensi_default'] ?? frekuensiDefault;
+        hariTagihanDefault =
+            settings['hari_tagihan_default'] ?? hariTagihanDefault;
+        namaPeriode = settings['nama_periode'] ?? namaPeriode;
+        mulaiPeriode = settings['mulai_periode'] ?? mulaiPeriode;
+        pengingatTagihan = settings['pengingat_tagihan'] ?? pengingatTagihan;
+        laporanBulanan = settings['laporan_bulanan'] ?? laporanBulanan;
+      }
+
+      if (result['anggota'] != null) {
+        _anggota = result['anggota'] as List<Anggota>;
+      }
+
+      if (result['pengeluaran'] != null) {
+        _pengeluaran = result['pengeluaran'] as List<Pengeluaran>;
+      }
+
+      if (result['pemasukanLain'] != null) {
+        _pemasukanLain = result['pemasukanLain'] as List<PemasukanLain>;
+      }
+
+      // Save ke local setelah load dari Supabase
+      await _saveToPrefs();
+      notifyListeners();
+
+      debugPrint('✅ Data loaded from Supabase successfully');
+    } catch (e) {
+      debugPrint('❌ Error loading from Supabase: $e');
+      // Tidak throw error, gunakan data local
     }
   }
 
   @override
   void notifyListeners() {
     _saveToPrefs();
+    _autoSyncToSupabase(); // Auto-sync ke Supabase
     super.notifyListeners();
   }
 
@@ -323,22 +440,48 @@ class AppData extends ChangeNotifier {
   }
 
   int get totalKas {
-    final pemasukan = _anggota.fold<int>(0, (sum, a) => sum + a.totalDibayar);
+    final pemasukanIuran = _anggota.fold<int>(
+      0,
+      (sum, a) => sum + a.totalDibayar,
+    );
+    final pemasukanLainTotal = _pemasukanLain.fold<int>(
+      0,
+      (sum, p) => sum + p.nominal,
+    );
     final keluar = totalPengeluaran;
-    return pemasukan - keluar;
+    return pemasukanIuran + pemasukanLainTotal - keluar;
   }
 
   int get pemasukanBulanIni {
     final now = DateTime.now();
-    int total = 0;
+    int totalIuran = 0;
     for (final a in _anggota) {
       for (final p in a.riwayatPembayaran) {
         if (p.tanggal.month == now.month && p.tanggal.year == now.year) {
-          total += p.jumlah;
+          totalIuran += p.jumlah;
         }
       }
     }
-    return total;
+
+    final totalPemasukanLain = _pemasukanLain
+        .where(
+          (p) => p.tanggal.month == now.month && p.tanggal.year == now.year,
+        )
+        .fold<int>(0, (sum, p) => sum + p.nominal);
+
+    return totalIuran + totalPemasukanLain;
+  }
+
+  int get totalPemasukanLain =>
+      _pemasukanLain.fold(0, (sum, p) => sum + p.nominal);
+
+  int get pemasukanLainBulanIni {
+    final now = DateTime.now();
+    return _pemasukanLain
+        .where(
+          (p) => p.tanggal.month == now.month && p.tanggal.year == now.year,
+        )
+        .fold(0, (sum, p) => sum + p.nominal);
   }
 
   int get totalPengeluaran => _pengeluaran.fold(0, (sum, p) => sum + p.nominal);
@@ -355,7 +498,7 @@ class AppData extends ChangeNotifier {
   int get saldoBersihBulanIni => pemasukanBulanIni - pengeluaranBulanIni;
 
   // ─── CRUD Anggota ────────────────────────────────────────────────────────
-  void tambahAnggota({required String nama, Uint8List? fotoProfil}) {
+  void tambahAnggota({required String nama, String? fotoProfilPath}) {
     _anggota.add(
       Anggota(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -363,18 +506,18 @@ class AppData extends ChangeNotifier {
         nominalIuran: nominalIuranDefault,
         frekuensi: frekuensiDefault,
         hariTagihan: {hariTagihanDefault},
-        fotoProfil: fotoProfil,
+        fotoProfilPath: fotoProfilPath,
       ),
     );
     notifyListeners();
   }
 
-  void editAnggota(String id, {required String nama, Uint8List? fotoProfil}) {
+  void editAnggota(String id, {required String nama, String? fotoProfilPath}) {
     final idx = _anggota.indexWhere((a) => a.id == id);
     if (idx != -1) {
       _anggota[idx].nama = nama;
-      if (fotoProfil != null) {
-        _anggota[idx].fotoProfil = fotoProfil;
+      if (fotoProfilPath != null) {
+        _anggota[idx].fotoProfilPath = fotoProfilPath;
       }
       // Note: We don't overwrite the member's specific settings on edit
       notifyListeners();
@@ -384,6 +527,13 @@ class AppData extends ChangeNotifier {
   void hapusAnggota(String id) {
     _anggota.removeWhere((a) => a.id == id);
     notifyListeners();
+
+    // Delete dari Supabase
+    if (SupabaseService.isInitialized) {
+      SupabaseService.deleteAnggota(id).catchError((e) {
+        debugPrint('❌ Error deleting anggota from Supabase: $e');
+      });
+    }
   }
 
   Anggota? getAnggota(String id) {
@@ -442,12 +592,50 @@ class AppData extends ChangeNotifier {
   void hapusPengeluaran(String id) {
     _pengeluaran.removeWhere((p) => p.id == id);
     notifyListeners();
+
+    // Delete dari Supabase
+    if (SupabaseService.isInitialized) {
+      SupabaseService.deletePengeluaran(id).catchError((e) {
+        debugPrint('❌ Error deleting pengeluaran from Supabase: $e');
+      });
+    }
+  }
+
+  // ─── CRUD Pemasukan Lain ─────────────────────────────────────────────────
+  void tambahPemasukanLain({
+    required int nominal,
+    required String kategori,
+    required String keterangan,
+    required DateTime tanggal,
+  }) {
+    _pemasukanLain.add(
+      PemasukanLain(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        nominal: nominal,
+        kategori: kategori,
+        keterangan: keterangan,
+        tanggal: tanggal,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void hapusPemasukanLain(String id) {
+    _pemasukanLain.removeWhere((p) => p.id == id);
+    notifyListeners();
+
+    // Delete dari Supabase
+    if (SupabaseService.isInitialized) {
+      SupabaseService.deletePemasukanLain(id).catchError((e) {
+        debugPrint('❌ Error deleting pemasukan lain from Supabase: $e');
+      });
+    }
   }
 
   // ─── Settings ────────────────────────────────────────────────────────────
   void updateSettings({
     String? namaAplikasi,
-    Uint8List? fotoAplikasi,
+    String? fotoAplikasiPath,
     int? nominalIuranDefault,
     String? frekuensiDefault,
     String? hariTagihanDefault,
@@ -457,7 +645,7 @@ class AppData extends ChangeNotifier {
     bool? laporanBulanan,
   }) {
     if (namaAplikasi != null) this.namaAplikasi = namaAplikasi;
-    if (fotoAplikasi != null) this.fotoAplikasi = fotoAplikasi;
+    if (fotoAplikasiPath != null) this.fotoAplikasiPath = fotoAplikasiPath;
     if (nominalIuranDefault != null) {
       this.nominalIuranDefault = nominalIuranDefault;
     }
@@ -475,7 +663,37 @@ class AppData extends ChangeNotifier {
   void resetData() {
     _anggota.clear();
     _pengeluaran.clear();
+    _pemasukanLain.clear();
     notifyListeners();
+
+    // Delete semua data dari Supabase
+    if (SupabaseService.isInitialized) {
+      _resetSupabaseData().catchError((e) {
+        debugPrint('❌ Error resetting Supabase data: $e');
+      });
+    }
+  }
+
+  /// Reset semua data di Supabase
+  Future<void> _resetSupabaseData() async {
+    try {
+      // Delete semua anggota (cascade akan delete pembayaran juga)
+      await SupabaseService.client.from('anggota').delete().neq('id', '');
+
+      // Delete semua pengeluaran
+      await SupabaseService.client.from('pengeluaran').delete().neq('id', '');
+
+      // Delete semua pemasukan lain
+      await SupabaseService.client
+          .from('pemasukan_lain')
+          .delete()
+          .neq('id', '');
+
+      debugPrint('✅ All data deleted from Supabase');
+    } catch (e) {
+      debugPrint('❌ Error resetting Supabase data: $e');
+      rethrow;
+    }
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────

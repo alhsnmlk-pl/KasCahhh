@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../main.dart';
 import '../models/app_data.dart';
+import '../utils/validators.dart';
 
 // ─── Show Helper ─────────────────────────────────────────────────────────────
 
@@ -81,6 +82,15 @@ class _CatatPembayaranSheetState extends State<CatatPembayaranSheet> {
   void _simpan() {
     if (!_formKey.currentState!.validate()) return;
 
+    // Validasi tanggal
+    final dateError = Validators.validateTanggalPembayaran(_selectedDate);
+    if (dateError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(dateError), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
     final data = AppDataProvider.of(context);
     final jumlah =
         int.tryParse(
@@ -88,13 +98,15 @@ class _CatatPembayaranSheetState extends State<CatatPembayaranSheet> {
         ) ??
         0;
 
+    final catatanSanitized = Validators.sanitizeInput(_catatanCtrl.text.trim());
+
     data.catatPembayaran(
       anggotaId: widget.anggota.id,
       jumlah: jumlah,
       tanggal: _selectedDate,
       metode: _selectedMethod,
       status: _selectedStatus,
-      catatan: _catatanCtrl.text.trim(),
+      catatan: catatanSanitized,
     );
 
     Navigator.pop(context);
@@ -203,18 +215,7 @@ class _CatatPembayaranSheetState extends State<CatatPembayaranSheet> {
                     TextFormField(
                       controller: _jumlahCtrl,
                       keyboardType: TextInputType.number,
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) {
-                          return 'Masukkan jumlah bayar';
-                        }
-                        final n = int.tryParse(
-                          v.replaceAll('.', '').replaceAll(',', ''),
-                        );
-                        if (n == null || n <= 0) {
-                          return 'Jumlah harus lebih dari 0';
-                        }
-                        return null;
-                      },
+                      validator: Validators.validateNominal,
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -358,6 +359,7 @@ class _CatatPembayaranSheetState extends State<CatatPembayaranSheet> {
                     TextField(
                       controller: _catatanCtrl,
                       maxLines: 2,
+                      maxLength: 200,
                       decoration: InputDecoration(
                         hintText: 'Tambahkan keterangan...',
                         hintStyle: GoogleFonts.plusJakartaSans(

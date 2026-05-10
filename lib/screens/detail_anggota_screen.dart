@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../main.dart';
 import '../models/app_data.dart';
+import '../widgets/foto_profil_widget.dart';
 import 'catat_pembayaran_sheet.dart';
 import 'tambah_anggota_sheet.dart';
 
@@ -127,29 +128,28 @@ class DetailAnggotaScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  if (anggota.fotoProfil != null)
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundImage: MemoryImage(anggota.fotoProfil!),
-                    )
-                  else
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF0F6E56),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        anggota.inisial,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF9AEDCF),
-                        ),
+                  FotoProfilWidget(
+                    fotoPath: anggota.fotoProfilPath,
+                    inisial: anggota.inisial,
+                    radius: 48,
+                  ),
+                  Container(
+                    width: 96,
+                    height: 96,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF0F6E56),
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      anggota.inisial,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF9AEDCF),
                       ),
                     ),
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     anggota.nama,
@@ -204,206 +204,208 @@ class DetailAnggotaScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ── Status Pembayaran Periode ─────────────────────────────────
-            Builder(builder: (context) {
-              final totalTagihan = data.hitungTotalTagihan(anggota);
-              final periodeSeharusnya = data.hitungJumlahPeriode(anggota);
-              final periodeTerbayar = data.hitungPeriodeTerbayar(anggota);
-              final kekurangan = data.hitungKekurangan(anggota);
-              final kelebihan = data.hitungKelebihan(anggota);
-              final selisihPeriode = data.hitungSelisihPeriode(anggota);
-              final label = data.labelPeriode(anggota);
-              final progress = totalTagihan > 0
-                  ? (anggota.totalDibayar / totalTagihan).clamp(0.0, 1.5)
-                  : 0.0;
+            Builder(
+              builder: (context) {
+                final totalTagihan = data.hitungTotalTagihan(anggota);
+                final periodeSeharusnya = data.hitungJumlahPeriode(anggota);
+                final periodeTerbayar = data.hitungPeriodeTerbayar(anggota);
+                final kekurangan = data.hitungKekurangan(anggota);
+                final kelebihan = data.hitungKelebihan(anggota);
+                final selisihPeriode = data.hitungSelisihPeriode(anggota);
+                final label = data.labelPeriode(anggota);
+                final progress = totalTagihan > 0
+                    ? (anggota.totalDibayar / totalTagihan).clamp(0.0, 1.5)
+                    : 0.0;
 
-              return Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Status Pembayaran Periode',
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onSurface,
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Period count badge
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '$periodeTerbayar dari $periodeSeharusnya $label terbayar',
-                          style: GoogleFonts.plusJakartaSans(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: colorScheme.onSurfaceVariant,
-                          ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Status Pembayaran Periode',
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
                         ),
-                        if (selisihPeriode > 0)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0F6E56).withValues(
-                                alpha: 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              '+$selisihPeriode $label ke depan',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF0F6E56),
-                              ),
-                            ),
-                          )
-                        else if (selisihPeriode < 0)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: colorScheme.error.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              'Kurang ${-selisihPeriode} $label',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.error,
-                              ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Period count badge
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '$periodeTerbayar dari $periodeSeharusnya $label terbayar',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: colorScheme.onSurfaceVariant,
                             ),
                           ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    // Progress bar
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(
-                        value: progress.clamp(0.0, 1.0).toDouble(),
-                        backgroundColor: colorScheme.onSurfaceVariant
-                            .withValues(alpha: 0.1),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          selisihPeriode >= 0
-                              ? const Color(0xFF0F6E56)
-                              : colorScheme.error,
-                        ),
-                        minHeight: 8,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Detail rows
-                    _buildInfoRow(
-                      context,
-                      'Total Tagihan ($periodeSeharusnya $label)',
-                      AppData.formatRupiah(totalTagihan),
-                      true,
-                    ),
-                    _buildInfoRow(
-                      context,
-                      'Total Dibayar',
-                      AppData.formatRupiah(anggota.totalDibayar),
-                      true,
-                    ),
-                    if (kekurangan > 0)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Kekurangan',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.error,
+                          if (selisihPeriode > 0)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
                               ),
-                            ),
-                            Text(
-                              '-${AppData.formatRupiah(kekurangan)}',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: colorScheme.error,
+                              decoration: BoxDecoration(
+                                color: const Color(
+                                  0xFF0F6E56,
+                                ).withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    else if (kelebihan > 0)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
                               child: Text(
-                                'Bayar di Muka ($selisihPeriode $label)',
+                                '+$selisihPeriode $label ke depan',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF0F6E56),
+                                ),
+                              ),
+                            )
+                          else if (selisihPeriode < 0)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: colorScheme.error.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                'Kurang ${-selisihPeriode} $label',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.error,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      // Progress bar
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: progress.clamp(0.0, 1.0).toDouble(),
+                          backgroundColor: colorScheme.onSurfaceVariant
+                              .withValues(alpha: 0.1),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            selisihPeriode >= 0
+                                ? const Color(0xFF0F6E56)
+                                : colorScheme.error,
+                          ),
+                          minHeight: 8,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Detail rows
+                      _buildInfoRow(
+                        context,
+                        'Total Tagihan ($periodeSeharusnya $label)',
+                        AppData.formatRupiah(totalTagihan),
+                        true,
+                      ),
+                      _buildInfoRow(
+                        context,
+                        'Total Dibayar',
+                        AppData.formatRupiah(anggota.totalDibayar),
+                        true,
+                      ),
+                      if (kekurangan > 0)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Kekurangan',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.error,
+                                ),
+                              ),
+                              Text(
+                                '-${AppData.formatRupiah(kekurangan)}',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: colorScheme.error,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else if (kelebihan > 0)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Bayar di Muka ($selisihPeriode $label)',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF0F6E56),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '+${AppData.formatRupiah(kelebihan)}',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF0F6E56),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.check_circle,
+                                color: Color(0xFF0F6E56),
+                                size: 16,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Lunas untuk periode ini',
                                 style: GoogleFonts.plusJakartaSans(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: const Color(0xFF0F6E56),
                                 ),
                               ),
-                            ),
-                            Text(
-                              '+${AppData.formatRupiah(kelebihan)}',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: const Color(0xFF0F6E56),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      )
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.check_circle,
-                              color: Color(0xFF0F6E56),
-                              size: 16,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Lunas untuk periode ini',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF0F6E56),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            }),
+                    ],
+                  ),
+                );
+              },
+            ),
 
             const SizedBox(height: 24),
 

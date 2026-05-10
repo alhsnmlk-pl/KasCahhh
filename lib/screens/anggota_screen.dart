@@ -5,6 +5,7 @@ import '../main.dart';
 import '../models/app_data.dart';
 import '../widgets/anggota_list_card.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/foto_profil_widget.dart';
 import 'detail_anggota_screen.dart';
 import 'tambah_anggota_sheet.dart';
 
@@ -35,9 +36,13 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
 
     // Filter by tab
     if (_selectedTabIndex == 1) {
-      list = list.where((a) => data.isLunas(a, targetDate: _targetDate)).toList();
+      list = list
+          .where((a) => data.isLunas(a, targetDate: _targetDate))
+          .toList();
     } else if (_selectedTabIndex == 2) {
-      list = list.where((a) => !data.isLunas(a, targetDate: _targetDate)).toList();
+      list = list
+          .where((a) => !data.isLunas(a, targetDate: _targetDate))
+          .toList();
     }
 
     // Filter by search
@@ -66,26 +71,11 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            if (data.fotoAplikasi != null)
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: MemoryImage(data.fotoAplikasi!),
-              )
-            else
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.monetization_on,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
+            FotoProfilWidget(
+              fotoPath: data.fotoAplikasiPath,
+              inisial: data.initialAplikasi,
+              radius: 16,
+            ),
             const SizedBox(width: 12),
             Text(
               data.namaAplikasi,
@@ -213,7 +203,7 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            
+
             // Date Picker Selector
             InkWell(
               onTap: () async {
@@ -238,7 +228,10 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
                 }
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -249,7 +242,11 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.calendar_month_outlined, color: Color(0xFF0F6E56), size: 20),
+                        const Icon(
+                          Icons.calendar_month_outlined,
+                          color: Color(0xFF0F6E56),
+                          size: 20,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           'Target: ${AppData.formatTanggal(_targetDate)}',
@@ -342,8 +339,14 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
                           const SizedBox(height: 8),
                       itemBuilder: (context, i) {
                         final a = filtered[i];
-                        final sudahBayar = data.isLunas(a, targetDate: _targetDate);
-                        final selisih = data.hitungSelisihPeriode(a, targetDate: _targetDate);
+                        final sudahBayar = data.isLunas(
+                          a,
+                          targetDate: _targetDate,
+                        );
+                        final selisih = data.hitungSelisihPeriode(
+                          a,
+                          targetDate: _targetDate,
+                        );
                         final label = data.labelPeriode(a);
                         String? periodInfo;
                         Color? periodInfoColor;
@@ -356,7 +359,7 @@ class _AnggotaScreenState extends State<AnggotaScreen> {
                         }
                         return AnggotaListCard(
                           name: a.nama,
-                          fotoProfil: a.fotoProfil,
+                          fotoProfilPath: a.fotoProfilPath,
                           initial: a.inisial,
                           statusText: sudahBayar ? 'Lunas' : 'Belum Bayar',
                           statusColor: sudahBayar

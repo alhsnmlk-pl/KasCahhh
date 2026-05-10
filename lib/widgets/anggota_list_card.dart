@@ -1,10 +1,11 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../widgets/foto_profil_widget.dart';
+
 class AnggotaListCard extends StatelessWidget {
   final String name;
-  final Uint8List? fotoProfil;
+  final String? fotoProfilPath;
   final String initial;
   final String statusText;
   final Color statusColor;
@@ -19,7 +20,7 @@ class AnggotaListCard extends StatelessWidget {
   const AnggotaListCard({
     super.key,
     required this.name,
-    this.fotoProfil,
+    this.fotoProfilPath,
     required this.initial,
     required this.statusText,
     required this.statusColor,
@@ -62,29 +63,11 @@ class AnggotaListCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  if (fotoProfil != null)
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundImage: MemoryImage(fotoProfil!),
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                    )
-                  else
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      child: Text(
-                        initial,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
+                  FotoProfilWidget(
+                    fotoPath: fotoProfilPath,
+                    inisial: initial,
+                    radius: 24,
+                  ),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,8 +130,9 @@ class AnggotaListCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: (periodInfoColor ?? Colors.grey)
-                            .withValues(alpha: 0.1),
+                        color: (periodInfoColor ?? Colors.grey).withValues(
+                          alpha: 0.1,
+                        ),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(

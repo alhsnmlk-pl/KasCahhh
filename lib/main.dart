@@ -1,12 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'models/app_data.dart';
 import 'screens/beranda_screen.dart';
 import 'services/notification_service.dart';
+import 'services/supabase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load .env file
+  await dotenv.load(fileName: '.env');
+
+  // Initialize Notification Service
   await NotificationService.init();
+
+  // Initialize Supabase
+  try {
+    final supabaseUrl = dotenv.env['SUPABASE_URL'];
+    final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
+
+    if (supabaseUrl != null && supabaseAnonKey != null) {
+      await SupabaseService.initialize(
+        supabaseUrl: supabaseUrl,
+        supabaseAnonKey: supabaseAnonKey,
+      );
+      debugPrint('✅ Supabase initialized successfully');
+    } else {
+      debugPrint('⚠️ Supabase credentials not found in .env');
+    }
+  } catch (e) {
+    debugPrint('❌ Error initializing Supabase: $e');
+  }
+
   runApp(const KasCahhApp());
 }
 
@@ -36,31 +63,33 @@ class KasCahhApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppDataProvider(
       data: AppData(),
-      child: Builder(builder: (context) {
-        return MaterialApp(
-          title: AppDataProvider.of(context).namaAplikasi,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF005440),
-            primary: const Color(0xFF005440),
-            primaryContainer: const Color(0xFF0F6E56),
-            secondaryContainer: const Color(0xFFD3E7E0),
-            onSecondaryContainer: const Color(0xFF566863),
-            tertiaryContainer: const Color(0xFF3B6D11),
-            surface: const Color(0xFFFBF9F8),
-            onSurface: const Color(0xFF1B1C1C),
-            onSurfaceVariant: const Color(0xFF3F4944),
-            onPrimary: Colors.white,
-          ),
-          textTheme: GoogleFonts.plusJakartaSansTextTheme(
-            ThemeData.light().textTheme,
-          ),
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
-        );
-      }),
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            title: AppDataProvider.of(context).namaAplikasi,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF005440),
+                primary: const Color(0xFF005440),
+                primaryContainer: const Color(0xFF0F6E56),
+                secondaryContainer: const Color(0xFFD3E7E0),
+                onSecondaryContainer: const Color(0xFF566863),
+                tertiaryContainer: const Color(0xFF3B6D11),
+                surface: const Color(0xFFFBF9F8),
+                onSurface: const Color(0xFF1B1C1C),
+                onSurfaceVariant: const Color(0xFF3F4944),
+                onPrimary: Colors.white,
+              ),
+              textTheme: GoogleFonts.plusJakartaSansTextTheme(
+                ThemeData.light().textTheme,
+              ),
+              useMaterial3: true,
+            ),
+            home: const SplashScreen(),
+          );
+        },
+      ),
     );
   }
 }

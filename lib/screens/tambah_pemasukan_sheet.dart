@@ -7,38 +7,38 @@ import '../utils/validators.dart';
 
 // ─── Show Helper ─────────────────────────────────────────────────────────────
 
-void showTambahPengeluaranSheet(BuildContext context) {
+void showTambahPemasukanSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (context) => const TambahPengeluaranSheet(),
+    builder: (context) => const TambahPemasukanSheet(),
   );
 }
 
 // ─── Widget ──────────────────────────────────────────────────────────────────
 
-class TambahPengeluaranSheet extends StatefulWidget {
-  const TambahPengeluaranSheet({super.key});
+class TambahPemasukanSheet extends StatefulWidget {
+  const TambahPemasukanSheet({super.key});
 
   @override
-  State<TambahPengeluaranSheet> createState() => _TambahPengeluaranSheetState();
+  State<TambahPemasukanSheet> createState() => _TambahPemasukanSheetState();
 }
 
-class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
+class _TambahPemasukanSheetState extends State<TambahPemasukanSheet> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nominalCtrl = TextEditingController();
   final TextEditingController _keteranganCtrl = TextEditingController();
   final TextEditingController _dateCtrl = TextEditingController();
 
-  String _selectedCategory = 'Konsumsi';
+  String _selectedCategory = 'Donasi';
   DateTime _selectedDate = DateTime.now();
 
   final List<Map<String, dynamic>> _categories = [
-    {'name': 'Konsumsi', 'icon': Icons.restaurant},
-    {'name': 'Perlengkapan', 'icon': Icons.shopping_bag},
-    {'name': 'Transportasi', 'icon': Icons.directions_car},
-    {'name': 'Tagihan', 'icon': Icons.receipt_long},
+    {'name': 'Donasi', 'icon': Icons.volunteer_activism},
+    {'name': 'Sponsor', 'icon': Icons.business_center},
+    {'name': 'Penjualan', 'icon': Icons.shopping_cart},
+    {'name': 'Acara', 'icon': Icons.event},
     {'name': 'Lainnya', 'icon': Icons.more_horiz},
   ];
 
@@ -104,7 +104,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
       _keteranganCtrl.text.trim(),
     );
 
-    data.tambahPengeluaran(
+    data.tambahPemasukanLain(
       nominal: nominal,
       kategori: _selectedCategory,
       keterangan: keteranganSanitized,
@@ -115,7 +115,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Pengeluaran ${AppData.formatRupiah(nominal)} berhasil dicatat',
+          'Pemasukan ${AppData.formatRupiah(nominal)} berhasil dicatat',
         ),
         backgroundColor: const Color(0xFF0F6E56),
       ),
@@ -166,14 +166,33 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Tambah Pengeluaran',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.onSurface,
-                          letterSpacing: -0.24,
-                        ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF0F6E56,
+                              ).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.add_circle_outline,
+                              color: Color(0xFF0F6E56),
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Tambah Pemasukan',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.onSurface,
+                              letterSpacing: -0.24,
+                            ),
+                          ),
+                        ],
                       ),
                       InkWell(
                         onTap: () => Navigator.pop(context),
@@ -215,9 +234,9 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFBF9F8),
+                        color: const Color(0xFFE8F5F1),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFBEC9C3)),
+                        border: Border.all(color: const Color(0xFF0F6E56)),
                       ),
                       child: Row(
                         children: [
@@ -226,7 +245,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: colorScheme.onSurface,
+                              color: const Color(0xFF0F6E56),
                               letterSpacing: -0.64,
                             ),
                           ),
@@ -239,7 +258,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
-                                color: colorScheme.onSurface,
+                                color: const Color(0xFF0F6E56),
                                 letterSpacing: -0.64,
                               ),
                               decoration: const InputDecoration(
@@ -282,7 +301,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? const Color(0xFFA0F3D4)
+                                      ? const Color(0xFF0F6E56)
                                       : const Color(0xFFEFEDED),
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -293,7 +312,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                                       cat['icon'] as IconData,
                                       size: 18,
                                       color: isSelected
-                                          ? const Color(0xFF002117)
+                                          ? Colors.white
                                           : const Color(0xFF3F4944),
                                     ),
                                     const SizedBox(width: 8),
@@ -303,7 +322,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                         color: isSelected
-                                            ? const Color(0xFF002117)
+                                            ? Colors.white
                                             : const Color(0xFF3F4944),
                                         letterSpacing: 0.12,
                                       ),
@@ -330,7 +349,7 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                         color: colorScheme.onSurface,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Contoh: Makan siang dengan klien',
+                        hintText: 'Contoh: Donasi dari alumni',
                         prefixIcon: const Icon(
                           Icons.notes,
                           color: Color(0xFF3F4944),
@@ -420,16 +439,16 @@ class _TambahPengeluaranSheetState extends State<TambahPengeluaranSheet> {
                       onPressed: _simpan,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0F6E56),
-                        foregroundColor: const Color(0xFF9AEDCF),
+                        foregroundColor: Colors.white,
                         minimumSize: const Size.fromHeight(56),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 0,
                       ),
-                      icon: const Icon(Icons.save),
+                      icon: const Icon(Icons.check_circle),
                       label: Text(
-                        'Simpan Pengeluaran',
+                        'Simpan Pemasukan',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,

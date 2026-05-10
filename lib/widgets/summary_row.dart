@@ -8,6 +8,7 @@ class SummaryRow extends StatelessWidget {
   final String label;
   final String amount;
   final Color amountColor;
+  final VoidCallback? onTap;
 
   const SummaryRow({
     super.key,
@@ -17,11 +18,12 @@ class SummaryRow extends StatelessWidget {
     required this.label,
     required this.amount,
     required this.amountColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final row = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
@@ -45,15 +47,36 @@ class SummaryRow extends StatelessWidget {
             ),
           ],
         ),
-        Text(
-          amount,
-          style: GoogleFonts.plusJakartaSans(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: amountColor,
-          ),
+        Row(
+          children: [
+            Text(
+              amount,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: amountColor,
+              ),
+            ),
+            if (onTap != null) ...[
+              const SizedBox(width: 8),
+              Icon(Icons.add_circle, size: 20, color: iconColor),
+            ],
+          ],
         ),
       ],
     );
+
+    if (onTap != null) {
+      return InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: row,
+        ),
+      );
+    }
+
+    return row;
   }
 }

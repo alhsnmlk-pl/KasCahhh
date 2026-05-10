@@ -32,6 +32,22 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 ---
 
+## 🔒 Security Notice
+
+> **⚠️ IMPORTANT: API Keys Rotation Required**
+> 
+> API keys Supabase sebelumnya ter-commit ke repository dan telah **di-rotate**. 
+> Jika Anda clone repository ini:
+> 
+> 1. Copy `.env.example` menjadi `.env`
+> 2. Dapatkan API keys baru dari [Supabase Dashboard](https://app.supabase.com)
+> 3. Isi credentials di file `.env`
+> 4. **JANGAN commit file `.env` ke Git!**
+> 
+> 📖 Baca [SECURITY_GUIDE.md](SECURITY_GUIDE.md) untuk detail lengkap
+
+---
+
 ## 📥 Download APK
 
 ### Latest Release: v1.0.0
@@ -59,6 +75,7 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 ### 💰 Pencatatan Keuangan
 - Catat pembayaran iuran (Tunai/Transfer)
+- Catat pemasukan dari sumber lain (Donasi, Sponsor, dll)
 - Catat pengeluaran dengan kategori
 - Tracking status pembayaran (Lunas/DP)
 - Perhitungan otomatis tagihan berdasarkan periode
@@ -66,7 +83,8 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 ### 📊 Dashboard & Laporan
 - Ringkasan kas terkumpul
 - Statistik anggota (Total, Sudah Bayar, Belum Bayar)
-- Ringkasan pemasukan dan pengeluaran bulanan
+- Ringkasan pemasukan iuran dan pemasukan lain
+- Ringkasan pengeluaran bulanan
 - Saldo bersih real-time
 
 ### 🔔 Notifikasi
@@ -74,10 +92,12 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 - Notifikasi anggota belum bayar
 - Izin notifikasi Android/iOS
 
-### 📤 Export Data
-- Export rekap kas ke CSV
-- Export pengeluaran bulanan ke CSV
-- Share file via aplikasi lain
+### 📤 Export & Backup Data
+- **Supabase Cloud Sync**: Sync data otomatis ke cloud database (optional)
+- **Backup/Restore**: Backup semua data ke file JSON dan restore kapan saja
+- **Export CSV**: Export rekap kas dan pengeluaran ke CSV
+- **Share**: Bagikan file backup/export via aplikasi lain
+- **Auto Cleanup**: Hapus backup lama otomatis (30+ hari)
 
 ### ⚙️ Pengaturan Fleksibel
 - Kustomisasi nama dan logo aplikasi
@@ -117,17 +137,31 @@ git clone <repository-url>
 cd KasCahh
 ```
 
-2. **Install dependencies**
+2. **Setup Supabase Credentials** 🔒
+```bash
+# Copy .env.example menjadi .env
+cp .env.example .env
+
+# Edit .env dan isi dengan credentials Anda
+# Dapatkan dari: https://app.supabase.com → Settings → API
+```
+
+**IMPORTANT**: 
+- File `.env` sudah ada di `.gitignore` - JANGAN commit!
+- Baca [SECURITY_GUIDE.md](SECURITY_GUIDE.md) untuk detail lengkap
+- API keys lama sudah di-rotate dan tidak valid
+
+3. **Install dependencies**
 ```bash
 flutter pub get
 ```
 
-3. **Verifikasi instalasi**
+4. **Verifikasi instalasi**
 ```bash
 flutter doctor
 ```
 
-4. **Jalankan aplikasi**
+5. **Jalankan aplikasi**
 ```bash
 # Mode debug
 flutter run
@@ -139,7 +173,7 @@ flutter run --release
 flutter run -d <device-id>
 ```
 
-5. **Lihat daftar device**
+6. **Lihat daftar device**
 ```bash
 flutter devices
 ```
@@ -158,6 +192,7 @@ flutter devices
 | **flutter_local_notifications** | ^21.0.0 | Notifikasi lokal |
 | **permission_handler** | ^12.0.1 | Manajemen izin aplikasi |
 | **timezone** | ^0.11.0 | Timezone untuk scheduling notifikasi |
+| **supabase_flutter** | ^2.8.0 | Cloud database & sync (optional) |
 
 ### Update Dependencies
 ```bash
@@ -183,16 +218,23 @@ lib/
 │   ├── detail_anggota_screen.dart   # Detail anggota
 │   ├── tambah_anggota_sheet.dart    # Form tambah anggota
 │   ├── catat_pembayaran_sheet.dart  # Form pembayaran
-│   └── tambah_pengeluaran_sheet.dart # Form pengeluaran
+│   ├── tambah_pengeluaran_sheet.dart # Form pengeluaran
+│   └── tambah_pemasukan_sheet.dart  # Form pemasukan lain
 ├── services/
 │   ├── notification_service.dart    # Service notifikasi
-│   └── export_service.dart          # Service export CSV
+│   ├── export_service.dart          # Service export CSV
+│   ├── storage_service.dart         # Service penyimpanan foto
+│   ├── backup_service.dart          # Service backup/restore
+│   └── supabase_service.dart        # Service Supabase cloud sync
+├── utils/
+│   └── validators.dart              # Input validation utilities
 └── widgets/
     ├── bottom_nav.dart              # Bottom navigation
     ├── stat_card.dart               # Card statistik
     ├── summary_row.dart             # Row ringkasan
     ├── member_card.dart             # Card anggota
-    └── anggota_list_card.dart       # Card list anggota
+    ├── anggota_list_card.dart       # Card list anggota
+    └── foto_profil_widget.dart      # Widget foto profil async
 ```
 
 ## 🎨 Design System
@@ -222,18 +264,36 @@ Surface:                 #FBF9F8  // Off-White
 ### ✅ Completed Features
 - [x] Manajemen anggota lengkap (CRUD)
 - [x] Pencatatan pembayaran & pengeluaran
+- [x] Pencatatan pemasukan dari sumber lain
 - [x] Dashboard dengan statistik real-time
 - [x] Notifikasi pengingat tagihan
+- [x] Backup & restore data (JSON)
 - [x] Export data ke CSV
 - [x] Pengaturan aplikasi fleksibel
 - [x] Upload & display foto profil
 - [x] Filter & search anggota
 - [x] Perhitungan otomatis tagihan
+- [x] Input validation & sanitization
+- [x] Optimasi penyimpanan foto (file system)
+- [x] Supabase integration (cloud database)
+
+### 🚧 Optional Features
+- [ ] Auto sync ke Supabase (enable di pengaturan)
+- [ ] Multi-user dengan authentication
+- [ ] Realtime collaboration
+- [ ] Push notifications via Supabase
 
 ### 🎯 Production Ready
 - ✅ Tidak ada error kompilasi
 - ✅ Semua warning BuildContext sudah diperbaiki
 - ✅ Dependencies kompatibel dan up-to-date
+- ✅ Input validation di semua form
+- ✅ Error handling di export service
+- ✅ Application ID sudah diganti (id.kascahh.app)
+- ✅ Optimasi penyimpanan foto (file system)
+- ✅ Debounce save operation
+- ✅ Backup/restore feature
+- ⚠️ Perlu setup signing untuk production (lihat SIGNING_GUIDE.md)
 - ✅ Siap untuk build production (APK/AAB/IPA)
 
 ---
@@ -245,8 +305,9 @@ Surface:                 #FBF9F8  // Off-White
 flutter build apk --debug
 ```
 
-### Android APK (Release)
+### Android APK (Release) - ⚠️ Perlu Setup Signing
 ```bash
+# Lihat SIGNING_GUIDE.md untuk setup keystore
 flutter build apk --release
 ```
 

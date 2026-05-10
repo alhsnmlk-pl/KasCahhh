@@ -1,13 +1,14 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../widgets/foto_profil_widget.dart';
 
 class MemberCard extends StatelessWidget {
   final String initials;
   final String name;
   final String status;
   final String anggotaId;
-  final Uint8List? fotoProfil;
+  final String? fotoProfilPath;
   final VoidCallback? onTap;
   final VoidCallback? onTagih;
 
@@ -17,7 +18,7 @@ class MemberCard extends StatelessWidget {
     required this.name,
     required this.status,
     required this.anggotaId,
-    this.fotoProfil,
+    this.fotoProfilPath,
     this.onTap,
     this.onTagih,
   });
@@ -47,30 +48,11 @@ class MemberCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  if (fotoProfil != null)
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: MemoryImage(fotoProfil!),
-                      backgroundColor: const Color(0xFFE4E2E2),
-                    )
-                  else
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE4E2E2),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        initials,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF50625D),
-                        ),
-                      ),
-                    ),
+                  FotoProfilWidget(
+                    fotoPath: fotoProfilPath,
+                    inisial: initials,
+                    radius: 20,
+                  ),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,6 +7,7 @@ import '../models/app_data.dart';
 import '../services/export_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/foto_profil_widget.dart';
 import 'tambah_pengeluaran_sheet.dart';
 
 class CatatanScreen extends StatefulWidget {
@@ -106,26 +107,11 @@ class _CatatanScreenState extends State<CatatanScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            if (data.fotoAplikasi != null)
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: MemoryImage(data.fotoAplikasi!),
-              )
-            else
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.monetization_on,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
+            FotoProfilWidget(
+              fotoPath: data.fotoAplikasiPath,
+              inisial: data.initialAplikasi,
+              radius: 16,
+            ),
             const SizedBox(width: 12),
             Text(
               data.namaAplikasi,

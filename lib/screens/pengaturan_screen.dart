@@ -5,9 +5,13 @@ import 'package:image_picker/image_picker.dart';
 
 import '../main.dart';
 import '../models/app_data.dart';
+import '../services/backup_service.dart';
 import '../services/export_service.dart';
 import '../services/notification_service.dart';
+import '../services/storage_service.dart';
+import '../services/supabase_service.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/foto_profil_widget.dart';
 
 class PengaturanScreen extends StatefulWidget {
   const PengaturanScreen({super.key});
@@ -30,6 +34,7 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
   late bool _pengingatTagihan;
   late bool _laporanBulanan;
   Uint8List? _fotoAplikasi;
+  String? _fotoAplikasiPath;
 
   final List<String> _frekuensiOptions = ['Bulanan', 'Mingguan', 'Harian'];
 
@@ -65,7 +70,17 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
     _selectedHariTagihan = data.hariTagihanDefault;
     _pengingatTagihan = data.pengingatTagihan;
     _laporanBulanan = data.laporanBulanan;
-    _fotoAplikasi = data.fotoAplikasi;
+    _fotoAplikasiPath = data.fotoAplikasiPath;
+    _loadFoto();
+  }
+
+  Future<void> _loadFoto() async {
+    if (_fotoAplikasiPath != null) {
+      final bytes = await StorageService.loadFotoProfil(_fotoAplikasiPath);
+      if (mounted) {
+        setState(() => _fotoAplikasi = bytes);
+      }
+    }
   }
 
   @override
@@ -87,7 +102,7 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
 
     data.updateSettings(
       namaAplikasi: _namaAplikasiCtrl.text.trim(),
-      fotoAplikasi: _fotoAplikasi,
+      fotoAplikasiPath: _fotoAplikasiPath,
       nominalIuranDefault: nominal,
       frekuensiDefault: _selectedFrekuensi,
       hariTagihanDefault: _selectedHariTagihan,
@@ -149,6 +164,242 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Gagal export: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  // ─── Backup/Restore ────────────────────────────────────────────────────────
+
+  Future<void> _buatBackup() async {
+    if (kIsWeb) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Backup hanya tersedia di versi mobile (Android/iOS)'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    try {
+      // Show loading
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 16),
+              Text('Membuat backup...'),
+            ],
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xFF0F6E56),
+        ),
+      );
+
+      await BackupService.shareBackup();
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('✅ Backup berhasil dibuat dan siap dibagikan'),
+          backgroundColor: Color(0xFF0F6E56),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal membuat backup: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _restoreBackup() async {
+    if (kIsWeb) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Restore hanya tersedia di versi mobile (Android/iOS)'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final backups = await BackupService.getBackupFiles();
+
+      if (!mounted) return;
+
+      if (backups.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tidak ada file backup ditemukan'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+
+      // Show dialog untuk pilih backup
+      final selectedBackup = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            'Pilih Backup',
+            style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: backups.length,
+              itemBuilder: (context, index) {
+                final backup = backups[index];
+                final fileName = backup.path.split('\\').last;
+                final date = BackupService.getBackupDate(fileName);
+                final stat = backup.statSync();
+                final size = BackupService.formatFileSize(stat.size);
+
+                return ListTile(
+                  leading: const Icon(Icons.backup, color: Color(0xFF0F6E56)),
+                  title: Text(
+                    date != null ? AppData.formatTanggal(date) : fileName,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(
+                    '$size • ${date?.hour.toString().padLeft(2, '0')}:${date?.minute.toString().padLeft(2, '0')}',
+                    style: GoogleFonts.plusJakartaSans(fontSize: 12),
+                  ),
+                  onTap: () => Navigator.pop(ctx, backup.path),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      await BackupService.deleteBackup(backup.path);
+                      if (!context.mounted) return;
+                      Navigator.pop(ctx);
+                      _restoreBackup(); // Refresh list
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text('Batal', style: GoogleFonts.plusJakartaSans()),
+            ),
+          ],
+        ),
+      );
+
+      if (selectedBackup == null || !mounted) return;
+
+      // Konfirmasi restore
+      final confirm = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            'Restore Data?',
+            style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'Data saat ini akan diganti dengan data dari backup. Pastikan Anda sudah membuat backup data saat ini jika diperlukan.',
+            style: GoogleFonts.plusJakartaSans(fontSize: 14),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text('Batal', style: GoogleFonts.plusJakartaSans()),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0F6E56),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                'Restore',
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      if (confirm != true || !mounted) return;
+
+      // Show loading
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 16),
+              Text('Memulihkan data...'),
+            ],
+          ),
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xFF0F6E56),
+        ),
+      );
+
+      final success = await BackupService.restoreFromBackup(selectedBackup);
+
+      if (!mounted) return;
+
+      if (success) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              '✅ Data berhasil dipulihkan. Silakan restart aplikasi untuk melihat perubahan.',
+            ),
+            backgroundColor: Color(0xFF0F6E56),
+            duration: Duration(seconds: 5),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal restore backup: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -220,26 +471,11 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            if (data.fotoAplikasi != null)
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: MemoryImage(data.fotoAplikasi!),
-              )
-            else
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.monetization_on,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
+            FotoProfilWidget(
+              fotoPath: data.fotoAplikasiPath,
+              inisial: data.initialAplikasi,
+              radius: 16,
+            ),
             const SizedBox(width: 12),
             Text(
               data.namaAplikasi,
@@ -314,13 +550,43 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                         right: 0,
                         child: InkWell(
                           onTap: () async {
+                            if (!mounted) return;
+
+                            final messenger = ScaffoldMessenger.of(context);
                             final picker = ImagePicker();
                             final file = await picker.pickImage(
                               source: ImageSource.gallery,
+                              maxWidth: 800,
+                              maxHeight: 800,
+                              imageQuality: 85,
                             );
+
+                            if (!mounted) return;
+
                             if (file != null) {
                               final bytes = await file.readAsBytes();
-                              setState(() => _fotoAplikasi = bytes);
+
+                              try {
+                                final path =
+                                    await StorageService.saveFotoProfil(
+                                      'app_logo',
+                                      bytes,
+                                    );
+
+                                if (mounted) {
+                                  setState(() {
+                                    _fotoAplikasi = bytes;
+                                    _fotoAplikasiPath = path;
+                                  });
+                                }
+                              } catch (e) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Gagal menyimpan foto: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: Container(
@@ -560,17 +826,121 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
             ),
             const SizedBox(height: 24),
 
+            // ── Supabase Cloud Sync Status ────────────────────────────────
+            if (SupabaseService.isInitialized)
+              _buildSection(
+                icon: Icons.cloud_done,
+                title: 'Cloud Sync',
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE8F5F1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: const Color(0xFF0F6E56).withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF0F6E56),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.cloud_done,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Auto-Sync Aktif',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF0F6E56),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Data otomatis tersinkronisasi ke cloud setiap kali ada perubahan',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12,
+                                color: const Color(0xFF0F6E56),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            if (SupabaseService.isInitialized) const SizedBox(height: 24),
+
             // ── Data Kas ───────────────────────────────────────────────────
             _buildSection(
               icon: Icons.storage,
               title: 'Data Kas',
               child: Column(
                 children: [
+                  // Backup
                   ElevatedButton.icon(
-                    onPressed: _exportCSV,
+                    onPressed: _buatBackup,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFD3E7E0),
                       foregroundColor: const Color(0xFF0F6E56),
+                      elevation: 0,
+                      minimumSize: const Size.fromHeight(48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.backup, size: 20),
+                    label: Text(
+                      'Buat Backup Data',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Restore
+                  ElevatedButton.icon(
+                    onPressed: _restoreBackup,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFE8F5F1),
+                      foregroundColor: const Color(0xFF0F6E56),
+                      elevation: 0,
+                      minimumSize: const Size.fromHeight(48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.restore, size: 20),
+                    label: Text(
+                      'Pulihkan dari Backup',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Export CSV
+                  ElevatedButton.icon(
+                    onPressed: _exportCSV,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFF8E1),
+                      foregroundColor: const Color(0xFFF57C00),
                       elevation: 0,
                       minimumSize: const Size.fromHeight(48),
                       shape: RoundedRectangleBorder(
@@ -587,6 +957,7 @@ class _PengaturanScreenState extends State<PengaturanScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Reset
                   ElevatedButton.icon(
                     onPressed: _konfirmasiReset,
                     style: ElevatedButton.styleFrom(
