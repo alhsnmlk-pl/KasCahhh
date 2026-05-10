@@ -50,17 +50,27 @@ Aplikasi Flutter untuk mengelola kas dan iuran anggota dengan mudah dan efisien.
 
 ## 📥 Download APK
 
-### Latest Release: v1.0.0
+### Latest Release: v1.1.0 🔒 Security Update
 
-📦 **[Download KasCahh v1.0.0 → GitHub Releases](https://github.com/alhsnmlk-pl/KasCahhh/releases/latest)**
+📦 **[Download KasCahh v1.1.0 → GitHub Releases](https://github.com/alhsnmlk-pl/KasCahhh/releases/latest)**
+
+#### What's New in v1.1.0:
+- 🔒 **CRITICAL**: Fixed Row Level Security (RLS) policies
+- 🔑 **CRITICAL**: Rotated exposed API keys
+- 📚 Added comprehensive security documentation
+- 🛡️ Improved database security with RLS options
+- ✅ Verified Supabase connection and data sync
 
 #### Cara Install:
-1. Buka link di atas dan download file `.apk` dari bagian **Assets**
+1. Buka link di atas dan download file `KasCahh-v1.1.0.apk` dari bagian **Assets**
 2. Buka file APK di device Android
 3. Izinkan instalasi dari sumber tidak dikenal (jika diminta)
 4. Install dan jalankan aplikasi
+5. **PENTING**: Setup Supabase credentials (lihat [QUICK_START_SECURITY.md](QUICK_START_SECURITY.md))
 
 > **Note**: APK ini adalah unsigned release build. Untuk production, sebaiknya menggunakan signed APK.
+> 
+> 📖 **Security Setup Required**: Sebelum menggunakan aplikasi, baca [SECURITY_GUIDE.md](SECURITY_GUIDE.md) untuk setup credentials.
 
 ---
 
